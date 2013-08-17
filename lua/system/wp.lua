@@ -25,6 +25,12 @@ local function getLastIndex( t )
 end
 
 local function compareCoors( coor1, coor2 )
+
+end
+
+local function clearCarWayPoints( carId )
+	wayPoints[carId] = nil
+	wayPointsIndex[carId] = nil
 end
 
 local function addPoint( carId, maxSpeed )
@@ -340,6 +346,7 @@ end
 
 local function loadWayPoints( carId, fileName )
 	dofile( "table.save-1.0.lua" )
+	wayPoints[carId] = nil
 	if ( wayPoints[carId] == nil ) then
 		wayPoints[carId] = {}
 		wayPoints[carId].position = {}
@@ -473,14 +480,15 @@ end
 
 
 -- public interface
-M.update = update
-M.reset = reset
-M.agentSeek = agentSeek
-M.addPoint = addPoint
-M.loadWayPoints = loadWayPoints
-M.saveWayPoints = saveWayPoints
+M.update               = update
+M.reset                = reset
+M.agentSeek            = agentSeek
+M.addPoint             = addPoint
+M.loadWayPoints        = loadWayPoints
+M.saveWayPoints        = saveWayPoints
 M.printWayPointsForCar = printWayPointsForCar
-M.runCar = runCar
-M.getCurrentCarId = getCurrentCarId
+M.runCar               = runCar
+M.getCurrentCarId      = getCurrentCarId
+M.clearCarWayPoints    = clearCarWayPoints
 
 return M
