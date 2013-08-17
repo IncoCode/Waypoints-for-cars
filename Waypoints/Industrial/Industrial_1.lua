@@ -55,17 +55,17 @@ return {
 },
 -- Table: {6}
 {
-   ["maxSpeed"]=15,
+   ["maxSpeed"]=30,
    ["pos"]={38},
 },
 -- Table: {7}
 {
-   ["maxSpeed"]=15,
+   ["maxSpeed"]=30,
    ["pos"]={39},
 },
 -- Table: {8}
 {
-   ["maxSpeed"]=15,
+   ["maxSpeed"]=30,
    ["pos"]={40},
 },
 -- Table: {9}
@@ -85,27 +85,27 @@ return {
 },
 -- Table: {12}
 {
-   ["maxSpeed"]=25,
+   ["maxSpeed"]=35,
    ["pos"]={44},
 },
 -- Table: {13}
 {
-   ["maxSpeed"]=25,
+   ["maxSpeed"]=35,
    ["pos"]={45},
 },
 -- Table: {14}
 {
-   ["maxSpeed"]=25,
+   ["maxSpeed"]=35,
    ["pos"]={46},
 },
 -- Table: {15}
 {
-   ["maxSpeed"]=25,
+   ["maxSpeed"]=35,
    ["pos"]={47},
 },
 -- Table: {16}
 {
-   ["maxSpeed"]=25,
+   ["maxSpeed"]=35,
    ["pos"]={48},
 },
 -- Table: {17}
@@ -115,7 +115,7 @@ return {
 },
 -- Table: {18}
 {
-   ["maxSpeed"]=30,
+   ["maxSpeed"]=25,
    ["pos"]={50},
 },
 -- Table: {19}
@@ -150,37 +150,37 @@ return {
 },
 -- Table: {25}
 {
-   ["maxSpeed"]=25,
+   ["maxSpeed"]=35,
    ["pos"]={57},
 },
 -- Table: {26}
 {
-   ["maxSpeed"]=25,
+   ["maxSpeed"]=35,
    ["pos"]={58},
 },
 -- Table: {27}
 {
-   ["maxSpeed"]=25,
+   ["maxSpeed"]=35,
    ["pos"]={59},
 },
 -- Table: {28}
 {
-   ["maxSpeed"]=25,
+   ["maxSpeed"]=35,
    ["pos"]={60},
 },
 -- Table: {29}
 {
-   ["maxSpeed"]=25,
+   ["maxSpeed"]=35,
    ["pos"]={61},
 },
 -- Table: {30}
 {
-   ["maxSpeed"]=25,
+   ["maxSpeed"]=35,
    ["pos"]={62},
 },
 -- Table: {31}
 {
-   ["maxSpeed"]=25,
+   ["maxSpeed"]=35,
    ["pos"]={63},
 },
 -- Table: {32}
