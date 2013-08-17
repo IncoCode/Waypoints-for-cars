@@ -20,6 +20,7 @@ scanvas   = require("scanvas")
 simpleAI  = require("simpleAI")
 json      = require("json")
 wayPoints = require("wp")
+
 enableWayPoints = 1
 --scenario  = require("scenario")
 
@@ -59,27 +60,6 @@ function graphicsStep(dt)
 	end
 	raceTimer = raceTimer + dt
 	
-	local playerVehicle = BeamEngine:getSlot(0)
-	--print(BeamEngine:getSlot(1):getPosition())
-	--local newPos = BeamEngine:getSlot(1):getPosition()
-	--local newPos1 = float3(-3.434, -86.227, -0.67) + float3(10, 10, 10)
-	--local newPos2 = float3(-3.434, -86.227, -0.67) + float3(-10, -10, -10)	
-	--if ( BeamEngine:getSlot(1):getPosition() ~= float3(-3.434, -86.227, -0.67) and go ~= 0 ) then
-	--print(go)
-	--[[
-	if ( ( newPos["x"] >= newPos2["x"] and newPos["y"] >= newPos2["y"] and newPos["z"] >= newPos2["z"] ) and ( newPos["x"] <= newPos1["x"] and newPos["y"] <= newPos1["y"] and newPos["z"] <= newPos1["z"] ) and go ~= 0 ) then
-		go = 0
-		BeamEngine:getSlot(1):queueLuaCommand("input.axisY=0;input.parkingbrake=1;input.axisY2=0.5")
-		print("STOP")
-	elseif ( go ~= 0 ) then
-		wayPoints.agentSeek(1, BeamEngine:getSlot(1), float3(-3.434, -86.227, -0.67), false)
-		print("x="..newPos["x"]..", y="..newPos["y"]..", z="..newPos["z"])
-		print("x1="..newPos1["x"]..", y1="..newPos1["y"]..", z1="..newPos1["z"])
-		print("x2="..newPos2["x"]..", y2="..newPos2["y"]..", z2="..newPos2["z"])
-		print(" ")
-	end
-	--]]
-	--print(enableWayPoints)
 	if ( enableWayPoints ~= 0 ) then
 		wayPoints.update(dt)
 	end

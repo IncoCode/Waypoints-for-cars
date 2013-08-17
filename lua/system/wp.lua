@@ -4,12 +4,6 @@
 
 local M = {}
 
---[[
-local controlledVehicles = nil
-local oldAISlotCount = -1
-local playerVehicleID = -1
---]]
-
 -- table that contains the persistent data for the agents
 local agents = {}
 local wayPoints = {}
@@ -22,10 +16,6 @@ local function getLastIndex( t )
 		lastIndex = lastIndex + 1
 	end
 	return lastIndex
-end
-
-local function compareCoors( coor1, coor2 )
-
 end
 
 local function clearCarWayPoints( carId )
@@ -49,7 +39,7 @@ local function addPoint( carId, maxSpeed )
 	print("Point added!")
 end
 
-local function agentSeek(id, agent, targetPos, flee, maxSpeed)	
+local function agentSeek( id, agent, targetPos, flee, maxSpeed )	
 	if agents[id] == nil then		
 		-- init persistent data
 		agents[id] = { stopped = 0, touching = 0, tooFar = 0, origSteer = 0, circling = 0, escapeDist = -1} 
@@ -69,15 +59,7 @@ local function agentSeek(id, agent, targetPos, flee, maxSpeed)
 	
 	-- now the velocity
 	local throttle = 1
-	local brake = 0
-	
-	--[[
-	if input.enableDynamicSteering then
-		if input.enableDynamicSteering == true then
-			input.toggleDynamicSteering()
-		end
-	end
-	]]--	
+	local brake = 0	
 	
 	-- prevent it from getting stuck
 	if math.abs(ad.velo) >= 0.5 then
@@ -294,20 +276,6 @@ local function agentSeek(id, agent, targetPos, flee, maxSpeed)
 	-- prevent hydro breaking
 	if math.abs(math.abs(steer) - math.abs(ad.origSteer)) > 1.5 then steer = steer * 0.6 end				
 	
-	-- tell the agent how to move finally
-	local newPos = BeamEngine:getSlot(1):getPosition()
-	--local newPos1 = newPos + float3(10, 10, 10)
-	--local newPos2 = newPos + float3(-10, -10, -10)
-	local newPos1 = float3(-3.434, -86.227, -0.67) + float3(2, 2, 2)
-	local newPos2 = float3(-3.434, -86.227, -0.67) + float3(-2, -2, -2)	
-	--if ( BeamEngine:getSlot(1):getPosition() ~= float3(-3.434, -86.227, -0.67) and go ~= 0 ) then
-	--[[if ( ( newPos["x"] >= newPos2["x"] and newPos["y"] >= newPos2["y"] and newPos["z"] >= newPos2["z"] ) and ( newPos["x"] <= newPos1["x"] and newPos["y"] <= newPos1["y"] and newPos["z"] <= newPos1["z"] ) and go ~= 0 ) then
-		go = 0
-		BeamEngine:getSlot(1):queueLuaCommand("input.axisY=0;input.parkingbrake=1")
-	elseif ( go ~= 0) then
-		agent:queueLuaCommand("input.axisX="..steer..";input.axisY="..throttle..";input.axisY2="..brake..";input.parkingbrake=0")
-	end]]
-	
 	local airspeed = agent:getVelocity():length()
 	local carSpeed = math.floor(airspeed * 3.6) -- in km/h
 	--print("carSpeed = "..carSpeed)
@@ -321,7 +289,8 @@ local function agentSeek(id, agent, targetPos, flee, maxSpeed)
 	end
 	if ( throttle > 1 ) then throttle = 1 end
 	if ( brake > 1 ) then brake = 1 end
-	agent:queueLuaCommand("input.axisX="..steer..";input.axisY="..throttle..";input.axisY2="..brake..";input.parkingbrake=0")
+	-- tell the agent how to move finally	
+	agent:queueLuaCommand("input.axisX="..steer..";input.axisY="..throttle..";input.axisY2="..brake..";input.parkingbrakeInput=0")
 end
 
 local function saveWayPoints( carId, fileName )
@@ -401,83 +370,25 @@ local function update(mode)
 	for key in pairs(wayPoints) do
 		--print("key = "..key)
 		--print("arr = "..canCarRun[key])		
-		if ( canCarRun[key] == 1 ) then		
-			--print(key, value)
+		if ( canCarRun[key] == 1 ) then
 			if ( wayPointsIndex[key] == nil ) then
 				wayPointsIndex[key] = 1
 			end			
 			local newPos = BeamEngine:getSlot(key):getPosition()
 			local newPos1 = wayPoints[key].position[wayPointsIndex[key]].pos + float3(5, 5, 5)
-			local newPos2 = wayPoints[key].position[wayPointsIndex[key]].pos + float3(-5, -5, -5)	
-			--if ( BeamEngine:getSlot(1):getPosition() ~= float3(-3.434, -86.227, -0.67) and go ~= 0 ) then
-			--print(go)
+			local newPos2 = wayPoints[key].position[wayPointsIndex[key]].pos + float3(-5, -5, -5)
 			if ( ( newPos["x"] >= newPos2["x"] and newPos["y"] >= newPos2["y"] and newPos["z"] >= newPos2["z"] ) and ( newPos["x"] <= newPos1["x"] and newPos["y"] <= newPos1["y"] and newPos["z"] <= newPos1["z"] ) and go ~= 0 ) then
 				wayPointsIndex[key] = wayPointsIndex[key] + 1
 				if (wayPointsIndex[key] > getLastIndex( wayPoints[key].position ) - 1 ) then
-					--go = 0
 					BeamEngine:getSlot(key):queueLuaCommand("input.axisY=0;input.parkingbrake=1;input.axisY2=0.5")
 					wayPointsIndex[key] = 1
 				end
-				--go = 0
-				--BeamEngine:getSlot(1):queueLuaCommand("input.axisY=0;input.parkingbrake=1;input.axisY2=0.5")
-				--print("STOP")
 			elseif ( canCarRun[key] ~= 0 ) then
 				agentSeek(key, BeamEngine:getSlot(key), wayPoints[key].position[wayPointsIndex[key]].pos, false, wayPoints[key].position[wayPointsIndex[key]].maxSpeed)
-				--[[
-				print("x="..newPos["x"]..", y="..newPos["y"]..", z="..newPos["z"])
-				print("x1="..newPos1["x"]..", y1="..newPos1["y"]..", z1="..newPos1["z"])
-				print("x2="..newPos2["x"]..", y2="..newPos2["y"]..", z2="..newPos2["z"])
-				print(" ")
-				--]]
 			end
 		end
 	end
-	
-	--::continue::
-
-	--[[
-	local slotCount = BeamEngine:getSlotCount()
-	if oldAISlotCount ~= slotCount then updateControlList() end
-
-	--dump(mode)
-	local flee = (mode == "car0")
-	--print("ai mode: " .. mode)
-
-	-- done, we know the AI vehicles and the player controlled vehicles, now the fun begins
-	if playerVehicleID ~= -1 then
-		local playerVehicle = BeamEngine:getSlot(playerVehicleID)
-		
-		
-		if not playerVehicle or playerVehicle.activationMode ~= 1 then
-			-- switched, update and retry
-			updateControlList()
-			return
-		end
-		
-		local playerPos = playerVehicle:getPosition()
-		-- if a player exists, try to drive towards it
-		for k, vID in pairs(controlledVehicles) do
-			local agent = BeamEngine:getSlot(vID)
-			if agent then
-				agentSeek(vID, agent, playerPos, flee)
-			end
-		end
-	end
-	--]]
 end
-
-local function reset()
-	local slotCount = BeamEngine:getSlotCount()
-	if oldAISlotCount ~= slotCount then updateControlList() end
-
-	for k, vID in pairs(controlledVehicles) do
-		local agent = BeamEngine:getSlot(vID)
-		if agent then
-			agent:queueLuaCommand("input.axisX=0;input.axisY=0;input.axisY2=0;input.parkingbrake=0")
-		end
-	end
-end
-
 
 -- public interface
 M.update               = update
