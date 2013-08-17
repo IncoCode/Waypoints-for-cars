@@ -20,7 +20,7 @@ scanvas   = require("scanvas")
 simpleAI  = require("simpleAI")
 json      = require("json")
 wayPoints = require("wp")
-go = 0
+enableWayPoints = 1
 --scenario  = require("scenario")
 
 local systemCanvas = nil
@@ -79,7 +79,8 @@ function graphicsStep(dt)
 		print(" ")
 	end
 	--]]
-	if ( go ~= 0 ) then
+	--print(enableWayPoints)
+	if ( enableWayPoints ~= 0 ) then
 		wayPoints.update(dt)
 	end
 

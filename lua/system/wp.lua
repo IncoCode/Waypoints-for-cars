@@ -4,14 +4,17 @@
 
 local M = {}
 
+--[[
 local controlledVehicles = nil
 local oldAISlotCount = -1
 local playerVehicleID = -1
+--]]
 
 -- table that contains the persistent data for the agents
 local agents = {}
 local wayPoints = {}
 local wayPointsIndex = {}
+local canCarRun = {}
 
 local function getLastIndex( t )
 	local lastIndex = 1
@@ -21,28 +24,23 @@ local function getLastIndex( t )
 	return lastIndex
 end
 
+local function compareCoors( coor1, coor2 )
+end
+
 local function addPoint( carId, maxSpeed )
 	local playerPosition = BeamEngine:getSlot(0):getPosition()
 	if ( wayPoints[carId] == nil ) then
 		wayPoints[carId] = {}
 		wayPoints[carId].position = {}
-		--wayPoints[carId].position.pos = {}
-		--wayPoints[carId].position.maxSpeed = {}
+		if ( canCarRun[carId] == nil ) then
+			canCarRun[carId] = 0
+		end
 	end
-	-- if (wayPoints[carId].position == nil) then
-		-- wayPoints[carId].position = {}
-	-- end	
-	--table.insert( wayPoints[carId].position.pos, playerPosition )
 	local index = getLastIndex( wayPoints[carId].position )
-	--print(index)
-	--if (count == 1) then count = 1 end
 	wayPoints[carId].position[index] = {}
 	wayPoints[carId].position[index].pos = playerPosition
 	wayPoints[carId].position[index].maxSpeed = maxSpeed
-	--print(#wayPoints[carId].position)
-	--wayPoints[carId][] = playerPosition
-	--print("Point added = "..BeamEngine:getSlot(0):getPosition())
-	print("Point added")
+	print("Point added!")
 end
 
 local function agentSeek(id, agent, targetPos, flee, maxSpeed)	
@@ -313,7 +311,7 @@ local function agentSeek(id, agent, targetPos, flee, maxSpeed)
 		brake = ( carSpeed - maxSpeed ) / 5	
 	else
 		brake = 0
-		throttle = (maxSpeed - carSpeed) / 5		
+		throttle = ( maxSpeed - carSpeed ) / 5		
 	end
 	if ( throttle > 1 ) then throttle = 1 end
 	if ( brake > 1 ) then brake = 1 end
@@ -346,6 +344,9 @@ local function loadWayPoints( carId, fileName )
 		wayPoints[carId] = {}
 		wayPoints[carId].position = {}
 	end
+	if ( canCarRun[carId] == nil ) then
+		canCarRun[carId] = 0
+	end
 	local fileSt, err = table.load( "Waypoints/"..fileName..".lua" )
 	for key, value in pairs( fileSt.position ) do
 		local x = fileSt.position[key].pos["x"]
@@ -355,7 +356,7 @@ local function loadWayPoints( carId, fileName )
 		wayPoints[carId].position[key] = {}
 		wayPoints[carId].position[key].pos = float3( x, y, z )
 		wayPoints[carId].position[key].maxSpeed = maxSpeed
-	end
+	end	
 	print("WayPoints loaded!")
 end
 
@@ -368,37 +369,64 @@ local function printWayPointsForCar( carId )
 	end
 end
 
-local function update(mode)
-	for key, value in pairs(wayPoints) do
-		--print(key, value)
-		if ( wayPointsIndex[key] == nil ) then
-			wayPointsIndex[key] = 1
-		end
-		local newPos = BeamEngine:getSlot(1):getPosition()
-		local newPos1 = wayPoints[key].position[wayPointsIndex[key]].pos + float3(5, 5, 5)
-		local newPos2 = wayPoints[key].position[wayPointsIndex[key]].pos + float3(-5, -5, -5)	
-		--if ( BeamEngine:getSlot(1):getPosition() ~= float3(-3.434, -86.227, -0.67) and go ~= 0 ) then
-		--print(go)
-		if ( ( newPos["x"] >= newPos2["x"] and newPos["y"] >= newPos2["y"] and newPos["z"] >= newPos2["z"] ) and ( newPos["x"] <= newPos1["x"] and newPos["y"] <= newPos1["y"] and newPos["z"] <= newPos1["z"] ) and go ~= 0 ) then
-			wayPointsIndex[key] = wayPointsIndex[key] + 1
-			if (wayPointsIndex[key] > getLastIndex( wayPoints[key].position ) - 1 ) then
-				--go = 0
-				BeamEngine:getSlot(1):queueLuaCommand("input.axisY=0;input.parkingbrake=1;input.axisY2=0.5")
-				wayPointsIndex[key] = 1
-			end
-			--go = 0
-			--BeamEngine:getSlot(1):queueLuaCommand("input.axisY=0;input.parkingbrake=1;input.axisY2=0.5")
-			--print("STOP")
-		elseif ( go ~= 0 ) then
-			agentSeek(1, BeamEngine:getSlot(1), wayPoints[key].position[wayPointsIndex[key]].pos, false, wayPoints[key].position[wayPointsIndex[key]].maxSpeed)
-			--[[
-			print("x="..newPos["x"]..", y="..newPos["y"]..", z="..newPos["z"])
-			print("x1="..newPos1["x"]..", y1="..newPos1["y"]..", z1="..newPos1["z"])
-			print("x2="..newPos2["x"]..", y2="..newPos2["y"]..", z2="..newPos2["z"])
-			print(" ")
-			--]]
+local function runCar( carId )
+	if ( wayPoints[carId] == nil ) then
+		print("Load waypoints for this car!")
+	else
+		canCarRun[carId] = 1
+	end
+end
+
+local function getCurrentCarId()
+	local slotCount = BeamEngine:getSlotCount()
+	for objectID = 0, slotCount, 1 do
+		local b = BeamEngine:getSlot(objectID)
+		if b ~= nil then
+			if b.activationMode == 1 then
+				print("Current carId = "..objectID)
+				break
+			end			
 		end
 	end
+end
+
+local function update(mode)
+	for key in pairs(wayPoints) do
+		--print("key = "..key)
+		--print("arr = "..canCarRun[key])		
+		if ( canCarRun[key] == 1 ) then		
+			--print(key, value)
+			if ( wayPointsIndex[key] == nil ) then
+				wayPointsIndex[key] = 1
+			end			
+			local newPos = BeamEngine:getSlot(key):getPosition()
+			local newPos1 = wayPoints[key].position[wayPointsIndex[key]].pos + float3(5, 5, 5)
+			local newPos2 = wayPoints[key].position[wayPointsIndex[key]].pos + float3(-5, -5, -5)	
+			--if ( BeamEngine:getSlot(1):getPosition() ~= float3(-3.434, -86.227, -0.67) and go ~= 0 ) then
+			--print(go)
+			if ( ( newPos["x"] >= newPos2["x"] and newPos["y"] >= newPos2["y"] and newPos["z"] >= newPos2["z"] ) and ( newPos["x"] <= newPos1["x"] and newPos["y"] <= newPos1["y"] and newPos["z"] <= newPos1["z"] ) and go ~= 0 ) then
+				wayPointsIndex[key] = wayPointsIndex[key] + 1
+				if (wayPointsIndex[key] > getLastIndex( wayPoints[key].position ) - 1 ) then
+					--go = 0
+					BeamEngine:getSlot(key):queueLuaCommand("input.axisY=0;input.parkingbrake=1;input.axisY2=0.5")
+					wayPointsIndex[key] = 1
+				end
+				--go = 0
+				--BeamEngine:getSlot(1):queueLuaCommand("input.axisY=0;input.parkingbrake=1;input.axisY2=0.5")
+				--print("STOP")
+			elseif ( canCarRun[key] ~= 0 ) then
+				agentSeek(key, BeamEngine:getSlot(key), wayPoints[key].position[wayPointsIndex[key]].pos, false, wayPoints[key].position[wayPointsIndex[key]].maxSpeed)
+				--[[
+				print("x="..newPos["x"]..", y="..newPos["y"]..", z="..newPos["z"])
+				print("x1="..newPos1["x"]..", y1="..newPos1["y"]..", z1="..newPos1["z"])
+				print("x2="..newPos2["x"]..", y2="..newPos2["y"]..", z2="..newPos2["z"])
+				print(" ")
+				--]]
+			end
+		end
+	end
+	
+	--::continue::
 
 	--[[
 	local slotCount = BeamEngine:getSlotCount()
@@ -452,5 +480,7 @@ M.addPoint = addPoint
 M.loadWayPoints = loadWayPoints
 M.saveWayPoints = saveWayPoints
 M.printWayPointsForCar = printWayPointsForCar
+M.runCar = runCar
+M.getCurrentCarId = getCurrentCarId
 
 return M
