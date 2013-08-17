@@ -320,17 +320,7 @@ local function agentSeek(id, agent, targetPos, flee, maxSpeed)
 	agent:queueLuaCommand("input.axisX="..steer..";input.axisY="..throttle..";input.axisY2="..brake..";input.parkingbrake=0")
 end
 
-local function saveWayPoints( carId )
-	--dofile( "table.save-0.94.lua" )
-	--table.save( wayPoints[carId].position, "wayPoints_"..carId..".lua" )
-	--io.read()
-	--dofile( "pickle.lua" )
-	--print(pickle(wayPoints[carId].position))
-	--local f = io.open("wayPoints_"..carId..".lua", "w")
-	--f:write(textutils.serialize(wayPoints[carId].position))
-	--f:close()
-	--hWrite.write(textutils.serialize(wayPoints[carId].position))
-	--hWrite.close()
+local function saveWayPoints( carId, fileName )
 	dofile("table.save-1.0.lua")
 	local fileSt = {}
 	fileSt.position = {}
@@ -346,17 +336,17 @@ local function saveWayPoints( carId )
 		fileSt.position[key].maxSpeed = wayPoints[carId].position[key].maxSpeed
 		--print("x = "..x..", y = "..y..", z = "..z)
 	end
-	table.save( fileSt, "wayPoints_"..carId..".lua" )
+	table.save( fileSt, "Waypoints/"..fileName..".lua" )
 	print("WayPoints saved!")
 end
 
-local function loadWayPoints( carId )
+local function loadWayPoints( carId, fileName )
 	dofile( "table.save-1.0.lua" )
 	if ( wayPoints[carId] == nil ) then
 		wayPoints[carId] = {}
 		wayPoints[carId].position = {}
 	end
-	local fileSt, err = table.load( "wayPoints_"..carId..".lua" )
+	local fileSt, err = table.load( "Waypoints/"..fileName..".lua" )
 	for key, value in pairs( fileSt.position ) do
 		local x = fileSt.position[key].pos["x"]
 		local y = fileSt.position[key].pos["y"]
@@ -366,24 +356,10 @@ local function loadWayPoints( carId )
 		wayPoints[carId].position[key].pos = float3( x, y, z )
 		wayPoints[carId].position[key].maxSpeed = maxSpeed
 	end
-	--for i = 1, file
-	--io.read()
-	--local f = io.open("wayPoints_"..carId..".lua", "r")
-	--wayPoints[carId].position = textutils.unserialize(hRead.readLine())
-	--wayPoints[carId].position = textutils.unserialize(f:readLine())
-	--f:close()
 	print("WayPoints loaded!")
 end
 
 local function printWayPointsForCar( carId )
-	--[[
-	for i = 1, #wayPoints[carId].position do
-		local x = wayPoints[carId].position[i].pos["x"]
-		local y = wayPoints[carId].position[i].pos["y"]
-		local z = wayPoints[carId].position[i].pos["z"]
-		print("x = "..x..", y = "..y..", z = "..z)
-	end
-	--]]
 	for key, value in pairs( wayPoints[carId].position ) do
 		local x = wayPoints[carId].position[key].pos["x"]
 		local y = wayPoints[carId].position[key].pos["y"]
