@@ -161,7 +161,7 @@ return {
 },
 -- Table: {20}
 {
-   ["maxSpeed"]=20,
+   ["maxSpeed"]=35,
    ["pos"]={88},
 },
 -- Table: {21}
@@ -176,17 +176,17 @@ return {
 },
 -- Table: {23}
 {
-   ["maxSpeed"]=35,
+   ["maxSpeed"]=20,
    ["pos"]={91},
 },
 -- Table: {24}
 {
-   ["maxSpeed"]=45,
+   ["maxSpeed"]=20,
    ["pos"]={92},
 },
 -- Table: {25}
 {
-   ["maxSpeed"]=65,
+   ["maxSpeed"]=45,
    ["pos"]={93},
 },
 -- Table: {26}
