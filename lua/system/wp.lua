@@ -405,9 +405,10 @@ local function update(mode)
 		--print(go)
 		if ( ( newPos["x"] >= newPos2["x"] and newPos["y"] >= newPos2["y"] and newPos["z"] >= newPos2["z"] ) and ( newPos["x"] <= newPos1["x"] and newPos["y"] <= newPos1["y"] and newPos["z"] <= newPos1["z"] ) and go ~= 0 ) then
 			wayPointsIndex[key] = wayPointsIndex[key] + 1
-			if (wayPointsIndex[key] > getLastIndex( wayPoints[carId].position ) - 1 ) then
-				go = 0
+			if (wayPointsIndex[key] > getLastIndex( wayPoints[key].position ) - 1 ) then
+				--go = 0
 				BeamEngine:getSlot(1):queueLuaCommand("input.axisY=0;input.parkingbrake=1;input.axisY2=0.5")
+				wayPointsIndex[key] = 1
 			end
 			--go = 0
 			--BeamEngine:getSlot(1):queueLuaCommand("input.axisY=0;input.parkingbrake=1;input.axisY2=0.5")
