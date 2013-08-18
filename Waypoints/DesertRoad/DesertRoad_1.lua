@@ -91,12 +91,12 @@ return {
 },
 -- Table: {6}
 {
-   ["maxSpeed"]=25,
+   ["maxSpeed"]=15,
    ["pos"]={74},
 },
 -- Table: {7}
 {
-   ["maxSpeed"]=45,
+   ["maxSpeed"]=35,
    ["pos"]={75},
 },
 -- Table: {8}

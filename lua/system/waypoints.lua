@@ -3,6 +3,7 @@
 -- file, You can obtain one at http://beamng.com/bCDDL-1.1.txt
 
 -- Mod by Incognito
+-- Version: 1.0.0
 -- Link on the thread: http://www.beamng.com/threads/2947-Waypoints-%28paths%29-for-cars
 
 local M = {}
@@ -21,13 +22,27 @@ local function getLastIndex( t )
 	return lastIndex
 end
 
+local function getCurrentCarId()
+	local slotCount = BeamEngine:getSlotCount()
+	for objectID = 0, slotCount, 1 do
+		local b = BeamEngine:getSlot(objectID)
+		if b ~= nil then
+			if b.activationMode == 1 then
+				print("Current carId = "..objectID)
+				do return objectID end
+			end			
+		end
+	end	
+end
+
 local function clearCarWayPoints( carId )
 	wayPoints[carId] = nil
 	wayPointsIndex[carId] = nil
+	canCarRun[carId] = nil
 end
 
 local function addPoint( carId, maxSpeed )
-	local playerPosition = BeamEngine:getSlot(0):getPosition()
+	local playerPosition = BeamEngine:getSlot(getCurrentCarId()):getPosition()
 	if ( wayPoints[carId] == nil ) then
 		wayPoints[carId] = {}
 		wayPoints[carId].position = {}
@@ -355,19 +370,6 @@ local function runCar( carId )
 	end
 end
 
-local function getCurrentCarId()
-	local slotCount = BeamEngine:getSlotCount()
-	for objectID = 0, slotCount, 1 do
-		local b = BeamEngine:getSlot(objectID)
-		if b ~= nil then
-			if b.activationMode == 1 then
-				print("Current carId = "..objectID)
-				break
-			end			
-		end
-	end
-end
-
 local function update()
 	for key in pairs(wayPoints) do
 		if ( canCarRun[key] == 1 ) then
@@ -380,8 +382,9 @@ local function update()
 			if ( ( newPos["x"] >= newPos2["x"] and newPos["y"] >= newPos2["y"] and newPos["z"] >= newPos2["z"] ) and ( newPos["x"] <= newPos1["x"] and newPos["y"] <= newPos1["y"] and newPos["z"] <= newPos1["z"] ) and go ~= 0 ) then
 				wayPointsIndex[key] = wayPointsIndex[key] + 1
 				if (wayPointsIndex[key] > getLastIndex( wayPoints[key].position ) - 1 ) then
-					BeamEngine:getSlot(key):queueLuaCommand("input.axisY=0;input.parkingbrake=1;input.axisY2=0.5")
+					--BeamEngine:getSlot(key):queueLuaCommand("input.axisY=0;input.parkingbrake=1;input.axisY2=0.5")
 					wayPointsIndex[key] = 1
+					agentSeek(key, BeamEngine:getSlot(key), wayPoints[key].position[wayPointsIndex[key]].pos, false, wayPoints[key].position[wayPointsIndex[key]].maxSpeed)
 				end
 			elseif ( canCarRun[key] ~= 0 ) then
 				agentSeek(key, BeamEngine:getSlot(key), wayPoints[key].position[wayPointsIndex[key]].pos, false, wayPoints[key].position[wayPointsIndex[key]].maxSpeed)
