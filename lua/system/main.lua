@@ -19,7 +19,7 @@ gamelogic = require("gamelogic")
 scanvas   = require("scanvas")
 simpleAI  = require("simpleAI")
 json      = require("json")
-wayPoints = require("wp")
+wayPoints = require("waypoints")
 
 enableWayPoints = 1
 --scenario  = require("scenario")
@@ -61,7 +61,7 @@ function graphicsStep(dt)
 	raceTimer = raceTimer + dt
 	
 	if ( enableWayPoints ~= 0 ) then
-		wayPoints.update(dt)
+		wayPoints.update()
 	end
 
 

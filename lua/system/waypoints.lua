@@ -2,6 +2,9 @@
 -- If a copy of the bCDDL was not distributed with this
 -- file, You can obtain one at http://beamng.com/bCDDL-1.1.txt
 
+-- Mod by Incognito
+-- Link on the thread: http://www.beamng.com/threads/2947-Waypoints-%28paths%29-for-cars
+
 local M = {}
 
 -- table that contains the persistent data for the agents
@@ -278,8 +281,6 @@ local function agentSeek( id, agent, targetPos, flee, maxSpeed )
 	
 	local airspeed = agent:getVelocity():length()
 	local carSpeed = math.floor(airspeed * 3.6) -- in km/h
-	--print("carSpeed = "..carSpeed)
-	--print("maxSpeed = "..maxSpeed)
 	if ( carSpeed >= maxSpeed ) then
 		throttle = 0
 		brake = ( carSpeed - maxSpeed ) / 5	
@@ -288,7 +289,8 @@ local function agentSeek( id, agent, targetPos, flee, maxSpeed )
 		throttle = ( maxSpeed - carSpeed ) / 5		
 	end
 	if ( throttle > 1 ) then throttle = 1 end
-	if ( brake > 1 ) then brake = 1 end
+	if ( brake > 1 ) then brake = 1 end	
+	
 	-- tell the agent how to move finally	
 	agent:queueLuaCommand("input.axisX="..steer..";input.axisY="..throttle..";input.axisY2="..brake..";input.parkingbrakeInput=0")
 end
@@ -366,10 +368,8 @@ local function getCurrentCarId()
 	end
 end
 
-local function update(mode)
+local function update()
 	for key in pairs(wayPoints) do
-		--print("key = "..key)
-		--print("arr = "..canCarRun[key])		
 		if ( canCarRun[key] == 1 ) then
 			if ( wayPointsIndex[key] == nil ) then
 				wayPointsIndex[key] = 1
