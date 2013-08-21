@@ -3,7 +3,7 @@
 -- file, You can obtain one at http://beamng.com/bCDDL-1.1.txt
 
 -- Mod by Incognito
--- Version: 1.0.0
+-- Version: 1.0.1
 -- Link on the thread: http://www.beamng.com/threads/2947-Waypoints-%28paths%29-for-cars
 
 local M = {}
@@ -28,17 +28,23 @@ end
 
 local function getCurrentCarId()
 	local slotCount = BeamEngine:getSlotCount()
+	local result = 0
 	for objectID = 0, slotCount, 1 do
 		local b = BeamEngine:getSlot(objectID)
 		if b ~= nil then
 			if b.activationMode == 1 then
-				if ( p == 1 ) then
-					print("Current carId = "..objectID)
-				end
-				do return objectID end
+				result = objectID
+				break
+				--do return result end
 			end			
 		end
 	end	
+	do return result end
+end
+
+local function printCurrentCarId()
+	local carId = getCurrentCarId()
+	print("Current carId = "..carId)
 end
 
 local function clearCarWayPoints( carId )
@@ -87,18 +93,27 @@ local function recordPoint()
 	local x = playerPosition["x"]
 	local y = playerPosition["y"]
 	local z = playerPosition["z"]
+	
+	local airspeed = BeamEngine:getSlot(carId):getVelocity():length()
+	local carSpeed = math.floor(airspeed * 3.6) -- in km/h	
+	local diff = 0.5
+	if ( carSpeed > 45 and carSpeed <= 65 ) then
+		diff = 4
+	elseif ( carSpeed > 65 and carSpeed <= 100 ) then
+		diff = 6
+	else
+		diff = 10
+	end
 	if
-	math.abs(x - oldX) > 5 or
-	math.abs(y - oldY) > 5 or
-	math.abs(z - oldZ) > 5 or
-	wayPoints[carId] == nil then
-		local airspeed = BeamEngine:getSlot(carId):getVelocity():length()
-		local carSpeed = math.floor(airspeed * 3.6) -- in km/h
+	math.abs(x - oldX) >= diff or
+	math.abs(y - oldY) >= diff or
+	math.abs(z - oldZ) >= diff or
+	wayPoints[carId] == nil then		
 		addPoint( carId, carSpeed )
 	end
 end
 
-local function startRecordPath()
+local function startRecordingPath()
 	local carId = getCurrentCarId()
 	clearCarWayPoints( carId )
 	addPoint( carId, 15 )
@@ -106,7 +121,7 @@ local function startRecordPath()
 	print("Path recording enabled!")
 end
 
-local function stopRecordPath()
+local function stopRecordingPath()
 	recordEnabled = 0
 	print("Path recording disabled!")
 end
@@ -339,8 +354,10 @@ local function agentSeek( id, agent, targetPos, flee, maxSpeed )
 	if throttle > 1 then throttle = 1 end
 	if throttle < -1 then throttle = -1 end
 	
+	--[[
 	if steer < -1 then steer = -1 end
 	if steer > 1 then steer = 1 end
+	--]]
 	
 	if throttle < 0 then
 		brake = throttle * -1
@@ -348,7 +365,7 @@ local function agentSeek( id, agent, targetPos, flee, maxSpeed )
 	end
 	
 	-- prevent hydro breaking
-	if math.abs(math.abs(steer) - math.abs(ad.origSteer)) > 1.5 then steer = steer * 0.6 end				
+	--if math.abs(math.abs(steer) - math.abs(ad.origSteer)) > 1.5 then steer = steer * 0.6 end
 	
 	local airspeed = agent:getVelocity():length()
 	local carSpeed = math.floor(airspeed * 3.6) -- in km/h
@@ -367,16 +384,20 @@ local function agentSeek( id, agent, targetPos, flee, maxSpeed )
 		math.abs(avgVelo - ad.w1velo) > 15 or 
 		math.abs(avgVelo - ad.w2velo) > 15 or 
 		math.abs(avgVelo - ad.w3velo) > 15 then
-			throttle = throttle * 0.5
-			steer = steer * 1.2
+			--throttle = throttle * 0.5
+			throttle = 0.2
+			steer = steer * -1.5
+			brake = 0.8
 		end
 	end
-	if ( math.abs(steer) >= 0.3 and carSpeed / maxSpeed <= 0.75 ) then
+	if ( math.abs(steer) >= 0.1 and carSpeed / maxSpeed <= 0.75 ) then
+		print("work")
 		throttle = 0.2
 		if ( carSpeed > 25 ) then			
-			brake = 0.5
+			brake = 0.8
 		end
 	end
+	if math.abs(math.abs(steer) - math.abs(ad.origSteer)) > 1.5 then steer = steer * 0.6 end
 	if ( throttle > 1 ) then throttle = 1 end
 	if ( brake > 1 ) then brake = 1 end
 	if steer < -1 then steer = -1 end
@@ -417,6 +438,7 @@ local function loadWayPoints( carId, fileName )
 		canCarRun[carId] = 0
 	end
 	local fileSt, err = table.load( "Waypoints/"..fileName..".lua" )
+	assert( err == nil )
 	for key, value in pairs( fileSt.position ) do
 		local x = fileSt.position[key].pos["x"]
 		local y = fileSt.position[key].pos["y"]
@@ -457,8 +479,9 @@ local function update()
 				wayPointsIndex[key] = 1
 			end			
 			local newPos = BeamEngine:getSlot(key):getPosition()
-			local newPos1 = wayPoints[key].position[wayPointsIndex[key]].pos + float3(5, 5, 5)
-			local newPos2 = wayPoints[key].position[wayPointsIndex[key]].pos + float3(-5, -5, -5)
+			local coorDiff = 5
+			local newPos1 = wayPoints[key].position[wayPointsIndex[key]].pos + float3(coorDiff, coorDiff, coorDiff)
+			local newPos2 = wayPoints[key].position[wayPointsIndex[key]].pos + float3(-coorDiff, -coorDiff, -coorDiff)
 			if ( ( newPos["x"] >= newPos2["x"] and newPos["y"] >= newPos2["y"] and newPos["z"] >= newPos2["z"] ) and ( newPos["x"] <= newPos1["x"] and newPos["y"] <= newPos1["y"] and newPos["z"] <= newPos1["z"] ) and go ~= 0 ) then
 				wayPointsIndex[key] = wayPointsIndex[key] + 1
 				if (wayPointsIndex[key] > getLastIndex( wayPoints[key].position ) - 1 ) then
@@ -482,9 +505,9 @@ M.loadWayPoints        = loadWayPoints
 M.saveWayPoints        = saveWayPoints
 M.printWayPointsForCar = printWayPointsForCar
 M.runCar               = runCar
-M.getCurrentCarId      = getCurrentCarId
+M.printCurrentCarId    = printCurrentCarId
 M.clearCarWayPoints    = clearCarWayPoints
-M.startRecordPath      = startRecordPath
-M.stopRecordPath       = stopRecordPath
+M.startRecordingPath   = startRecordingPath
+M.stopRecordingPath    = stopRecordingPath
 
 return M
