@@ -265,6 +265,7 @@ local function agentSeek( id, agent, targetPos, flee, maxSpeed )
 	end
 	
 	--traction control
+	--[[
 	if 
 	math.abs(avgVelo - ad.w0velo) > 15 or 
 	math.abs(avgVelo - ad.w1velo) > 15 or 
@@ -273,6 +274,7 @@ local function agentSeek( id, agent, targetPos, flee, maxSpeed )
 		throttle = throttle * 0.5
 		--steer = steer * 1.5
 	end
+	--]]
 	
 	--print("touching"..ad.touching)
 	--print("stopped"..ad.stopped)
@@ -296,15 +298,35 @@ local function agentSeek( id, agent, targetPos, flee, maxSpeed )
 	
 	local airspeed = agent:getVelocity():length()
 	local carSpeed = math.floor(airspeed * 3.6) -- in km/h
+	--print("brake = "..brake)
+	--print("throttle = "..throttle)
 	if ( carSpeed >= maxSpeed ) then
 		throttle = 0
 		brake = ( carSpeed - maxSpeed ) / 5	
 	else
 		brake = 0
-		throttle = ( maxSpeed - carSpeed ) / 5		
+		throttle = ( maxSpeed - carSpeed ) / 5
+		
+		--traction control
+		if 
+		math.abs(avgVelo - ad.w0velo) > 15 or 
+		math.abs(avgVelo - ad.w1velo) > 15 or 
+		math.abs(avgVelo - ad.w2velo) > 15 or 
+		math.abs(avgVelo - ad.w3velo) > 15 then
+			throttle = throttle * 0.5
+			steer = steer * 1.2
+		end
+	end
+	if ( math.abs(steer) >= 0.3 and carSpeed / maxSpeed <= 0.75 ) then
+		throttle = 0.2
+		if ( carSpeed > 25 ) then			
+			brake = 0.5
+		end
 	end
 	if ( throttle > 1 ) then throttle = 1 end
-	if ( brake > 1 ) then brake = 1 end	
+	if ( brake > 1 ) then brake = 1 end
+	if steer < -1 then steer = -1 end
+	if steer > 1 then steer = 1 end
 	
 	-- tell the agent how to move finally	
 	agent:queueLuaCommand("input.axisX="..steer..";input.axisY="..throttle..";input.axisY2="..brake..";input.parkingbrakeInput=0")
