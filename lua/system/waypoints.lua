@@ -10,9 +10,13 @@ local M = {}
 
 -- table that contains the persistent data for the agents
 local agents = {}
+
 local wayPoints = {}
 local wayPointsIndex = {}
 local canCarRun = {}
+
+local recordEnabled = 0
+--local oldIndex = 0
 
 local function getLastIndex( t )
 	local lastIndex = 1
@@ -28,7 +32,9 @@ local function getCurrentCarId()
 		local b = BeamEngine:getSlot(objectID)
 		if b ~= nil then
 			if b.activationMode == 1 then
-				print("Current carId = "..objectID)
+				if ( p == 1 ) then
+					print("Current carId = "..objectID)
+				end
 				do return objectID end
 			end			
 		end
@@ -41,8 +47,7 @@ local function clearCarWayPoints( carId )
 	canCarRun[carId] = nil
 end
 
-local function addPoint( carId, maxSpeed )
-	local playerPosition = BeamEngine:getSlot(getCurrentCarId()):getPosition()
+local function initWayPointsArr( carId )
 	if ( wayPoints[carId] == nil ) then
 		wayPoints[carId] = {}
 		wayPoints[carId].position = {}
@@ -50,11 +55,60 @@ local function addPoint( carId, maxSpeed )
 			canCarRun[carId] = 0
 		end
 	end
+end
+
+local function addPoint( carId, maxSpeed )
+	local playerPosition = BeamEngine:getSlot(getCurrentCarId()):getPosition()
+	--[[
+	if ( wayPoints[carId] == nil ) then
+		wayPoints[carId] = {}
+		wayPoints[carId].position = {}
+		if ( canCarRun[carId] == nil ) then
+			canCarRun[carId] = 0
+		end
+	end
+	--]]
+	initWayPointsArr( carId )
 	local index = getLastIndex( wayPoints[carId].position )
 	wayPoints[carId].position[index] = {}
 	wayPoints[carId].position[index].pos = playerPosition
 	wayPoints[carId].position[index].maxSpeed = maxSpeed
 	print("Point added!")
+end
+
+local function recordPoint()	
+	local carId = getCurrentCarId()
+	--initWayPointsArr( carId )
+	local playerPosition = BeamEngine:getSlot(carId):getPosition()	
+	local oldIndex = getLastIndex( wayPoints[carId].position ) - 1
+	local oldX = wayPoints[carId].position[oldIndex].pos["x"]
+	local oldY = wayPoints[carId].position[oldIndex].pos["y"]
+	local oldZ = wayPoints[carId].position[oldIndex].pos["z"]
+	local x = playerPosition["x"]
+	local y = playerPosition["y"]
+	local z = playerPosition["z"]
+	if
+	math.abs(x - oldX) > 5 or
+	math.abs(y - oldY) > 5 or
+	math.abs(z - oldZ) > 5 or
+	wayPoints[carId] == nil then
+		local airspeed = BeamEngine:getSlot(carId):getVelocity():length()
+		local carSpeed = math.floor(airspeed * 3.6) -- in km/h
+		addPoint( carId, carSpeed )
+	end
+end
+
+local function startRecordPath()
+	local carId = getCurrentCarId()
+	clearCarWayPoints( carId )
+	addPoint( carId, 15 )
+	recordEnabled = 1
+	print("Path recording enabled!")
+end
+
+local function stopRecordPath()
+	recordEnabled = 0
+	print("Path recording disabled!")
 end
 
 local function agentSeek( id, agent, targetPos, flee, maxSpeed )	
@@ -389,10 +443,14 @@ local function runCar( carId )
 		print("Load waypoints for this car!")
 	else
 		canCarRun[carId] = 1
+		print("Car was run!")
 	end
 end
 
 local function update()
+	if ( recordEnabled == 1 ) then
+		recordPoint()
+	end
 	for key in pairs(wayPoints) do
 		if ( canCarRun[key] == 1 ) then
 			if ( wayPointsIndex[key] == nil ) then
@@ -426,5 +484,7 @@ M.printWayPointsForCar = printWayPointsForCar
 M.runCar               = runCar
 M.getCurrentCarId      = getCurrentCarId
 M.clearCarWayPoints    = clearCarWayPoints
+M.startRecordPath      = startRecordPath
+M.stopRecordPath       = stopRecordPath
 
 return M
