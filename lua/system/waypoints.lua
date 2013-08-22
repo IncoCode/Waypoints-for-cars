@@ -391,7 +391,6 @@ local function agentSeek( id, agent, targetPos, flee, maxSpeed )
 		end
 	end
 	if ( math.abs(steer) >= 0.1 and carSpeed / maxSpeed <= 0.75 ) then
-		print("work")
 		throttle = 0.2
 		if ( carSpeed > 25 ) then			
 			brake = 0.8
@@ -469,6 +468,13 @@ local function runCar( carId )
 	end
 end
 
+local function stopCar( carId )
+	if ( canCarRun[carId] ~= nil ) then
+		canCarRun[carId] = 0
+		print("Car stopped!")
+	end
+end
+
 local function update()
 	if ( recordEnabled == 1 ) then
 		recordPoint()
@@ -509,5 +515,6 @@ M.printCurrentCarId    = printCurrentCarId
 M.clearCarWayPoints    = clearCarWayPoints
 M.startRecordingPath   = startRecordingPath
 M.stopRecordingPath    = stopRecordingPath
+M.stopCar              = stopCar
 
 return M
