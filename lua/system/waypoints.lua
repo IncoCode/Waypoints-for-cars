@@ -114,11 +114,15 @@ local function recordPoint()
 end
 
 local function startRecordingPath()
-	local carId = getCurrentCarId()
-	clearCarWayPoints( carId )
-	addPoint( carId, 15 )
-	recordEnabled = 1
-	print("Path recording enabled!")
+	if ( recordEnabled == 0 ) then
+		local carId = getCurrentCarId()
+		clearCarWayPoints( carId )
+		addPoint( carId, 15 )
+		recordEnabled = 1
+		print("Path recording enabled!")
+	else
+		print("Recording path already enabled!")
+	end
 end
 
 local function stopRecordingPath()
