@@ -16,7 +16,7 @@ local wayPointsIndex = {}
 local canCarRun = {}
 
 local recordEnabled = 0
---local oldIndex = 0
+local skipPointEnabled = 0
 
 local function getLastIndex( t )
 	local lastIndex = 1
@@ -65,15 +65,6 @@ end
 
 local function addPoint( carId, maxSpeed )
 	local playerPosition = BeamEngine:getSlot(getCurrentCarId()):getPosition()
-	--[[
-	if ( wayPoints[carId] == nil ) then
-		wayPoints[carId] = {}
-		wayPoints[carId].position = {}
-		if ( canCarRun[carId] == nil ) then
-			canCarRun[carId] = 0
-		end
-	end
-	--]]
 	initWayPointsArr( carId )
 	local index = getLastIndex( wayPoints[carId].position )
 	wayPoints[carId].position[index] = {}
@@ -147,6 +138,7 @@ local function agentSeek( id, agent, targetPos, flee, maxSpeed )
 	
 	local targetVector = targetPos - ad.pos	
 	local distance = targetVector:length()
+	--print(distance)
 	
 	-- now the velocity
 	local throttle = 1
@@ -284,10 +276,12 @@ local function agentSeek( id, agent, targetPos, flee, maxSpeed )
 	
 	
 	--stop circling
+	--[[
 	if ad.circling > 50 and math.abs(ad.velo) > 3 then
 		throttle = -1 + (absDirDiff * 0.6366)
 		steer = -steer
 	end
+	--]]
 	
 	--less steering while backing up
 	if reverse == true then
@@ -394,12 +388,12 @@ local function agentSeek( id, agent, targetPos, flee, maxSpeed )
 			brake = 0.8
 		end
 	end
-	if ( math.abs(steer) >= 0.1 and carSpeed / maxSpeed <= 0.75 ) then
+	if ( math.abs(steer) >= 0.15 and carSpeed / maxSpeed <= 0.75 ) then
 		throttle = 0.2
 		if ( carSpeed > 25 ) then			
 			brake = 0.8
 		end
-	end
+	end	
 	if math.abs(math.abs(steer) - math.abs(ad.origSteer)) > 1.5 then steer = steer * 0.6 end
 	if ( throttle > 1 ) then throttle = 1 end
 	if ( brake > 1 ) then brake = 1 end
@@ -492,6 +486,24 @@ local function update()
 			local coorDiff = 5
 			local newPos1 = wayPoints[key].position[wayPointsIndex[key]].pos + float3(coorDiff, coorDiff, coorDiff)
 			local newPos2 = wayPoints[key].position[wayPointsIndex[key]].pos + float3(-coorDiff, -coorDiff, -coorDiff)
+			
+			if ( skipPointEnabled == 1 ) then
+				local i = wayPointsIndex[key]
+				local distance  = (wayPoints[key].position[i].pos - newPos):length()			
+				if ( wayPoints[key].position[i + 1] == nil ) then
+					i = 1
+				end
+				local distance2 = (wayPoints[key].position[i + 1].pos - newPos):length()
+				while ( distance2 < distance ) do
+					i = i + 1
+					if ( wayPoints[key].position[i + 1] == nil ) then
+						i = 1
+					end
+					distance2 = (wayPoints[key].position[i + 1].pos - newPos):length()
+				end
+				wayPointsIndex[key] = i
+			end
+			
 			if ( ( newPos["x"] >= newPos2["x"] and newPos["y"] >= newPos2["y"] and newPos["z"] >= newPos2["z"] ) and ( newPos["x"] <= newPos1["x"] and newPos["y"] <= newPos1["y"] and newPos["z"] <= newPos1["z"] ) and go ~= 0 ) then
 				wayPointsIndex[key] = wayPointsIndex[key] + 1
 				if (wayPointsIndex[key] > getLastIndex( wayPoints[key].position ) - 1 ) then
