@@ -16,7 +16,7 @@ local wayPointsIndex = {}
 local canCarRun = {}
 
 local recordEnabled = 0
-local skipPointEnabled = 0
+local skipPointEnabled = 1
 
 local function getLastIndex( t )
 	local lastIndex = 1
@@ -386,7 +386,7 @@ local function agentSeek( id, agent, targetPos, flee, maxSpeed )
 			throttle = 0.2
 			steer = steer * -1.5
 			brake = 0.8
-		end
+		end		
 	end
 	if ( math.abs(steer) >= 0.15 and carSpeed / maxSpeed <= 0.75 ) then
 		throttle = 0.2
@@ -401,7 +401,8 @@ local function agentSeek( id, agent, targetPos, flee, maxSpeed )
 	if steer > 1 then steer = 1 end
 	
 	-- tell the agent how to move finally
-	agent:queueLuaCommand("input.axisX="..steer..";input.axisY="..throttle..";input.axisY2="..brake..";input.parkingbrakeInput=0")
+	local luaCommand = "input.event(\"axisx0\", %f, 1);input.event(\"axisy0\", %f, 1);input.event(\"axisy1\", %f, 1); input.event(\"axisy2\", %d, 1)"
+	agent:queueLuaCommand( string.format(luaCommand, -steer, throttle, brake, 0) )
 end
 
 local function saveWayPoints( carId, fileName )
