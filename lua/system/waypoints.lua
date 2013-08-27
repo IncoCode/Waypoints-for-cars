@@ -400,7 +400,7 @@ local function agentSeek( id, agent, targetPos, flee, maxSpeed )
 	if steer < -1 then steer = -1 end
 	if steer > 1 then steer = 1 end
 	
-	-- tell the agent how to move finally	
+	-- tell the agent how to move finally
 	agent:queueLuaCommand("input.axisX="..steer..";input.axisY="..throttle..";input.axisY2="..brake..";input.parkingbrakeInput=0")
 end
 
@@ -518,6 +518,14 @@ local function update()
 	end
 end
 
+local function enableSkipPoints()
+	skipPointEnabled = 1
+end
+
+local function disableSkipPoints()
+	skipPointEnabled = 0
+end
+
 -- public interface
 M.update               = update
 M.reset                = reset
@@ -532,5 +540,7 @@ M.clearCarWayPoints    = clearCarWayPoints
 M.startRecordingPath   = startRecordingPath
 M.stopRecordingPath    = stopRecordingPath
 M.stopCar              = stopCar
+M.enableSkipPoints     = enableSkipPoints
+M.disableSkipPoints    = disableSkipPoints
 
 return M
