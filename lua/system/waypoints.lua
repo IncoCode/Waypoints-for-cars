@@ -66,7 +66,8 @@ end
 local function addPoint( carId, maxSpeed )
 	local playerPosition = BeamEngine:getSlot(getCurrentCarId()):getPosition()
 	initWayPointsArr( carId )
-	local index = getLastIndex( wayPoints[carId].position )
+	--local index = getLastIndex( wayPoints[carId].position )
+	local index = wayPoints[carId].maxCount
 	wayPoints[carId].position[index] = {}
 	wayPoints[carId].position[index].pos = playerPosition
 	wayPoints[carId].position[index].maxSpeed = maxSpeed
@@ -77,7 +78,8 @@ local function recordPoint()
 	local carId = getCurrentCarId()
 	--initWayPointsArr( carId )
 	local playerPosition = BeamEngine:getSlot(carId):getPosition()	
-	local oldIndex = getLastIndex( wayPoints[carId].position ) - 1
+	--local oldIndex = getLastIndex( wayPoints[carId].position ) - 1
+	local oldIndex = wayPoints[carId].maxCount - 1
 	local oldX = wayPoints[carId].position[oldIndex].pos["x"]
 	local oldY = wayPoints[carId].position[oldIndex].pos["y"]
 	local oldZ = wayPoints[carId].position[oldIndex].pos["z"]
@@ -108,6 +110,7 @@ local function startRecordingPath()
 	if ( recordEnabled == 0 ) then
 		local carId = getCurrentCarId()
 		clearCarWayPoints( carId )
+		wayPoints[carId].maxCount = 1
 		addPoint( carId, 15 )
 		recordEnabled = 1
 		print("Path recording enabled!")
@@ -463,6 +466,7 @@ local function runCar( carId )
 		print("Load waypoints for this car!")
 	else
 		canCarRun[carId] = 1
+		wayPoints[carId].maxCount = getLastIndex( wayPoints[carId].position )
 		print("Car was run!")
 	end
 end
@@ -507,7 +511,8 @@ local function update()
 			
 			if ( ( newPos["x"] >= newPos2["x"] and newPos["y"] >= newPos2["y"] and newPos["z"] >= newPos2["z"] ) and ( newPos["x"] <= newPos1["x"] and newPos["y"] <= newPos1["y"] and newPos["z"] <= newPos1["z"] ) and go ~= 0 ) then
 				wayPointsIndex[key] = wayPointsIndex[key] + 1
-				if (wayPointsIndex[key] > getLastIndex( wayPoints[key].position ) - 1 ) then
+				--if ( wayPointsIndex[key] > getLastIndex( wayPoints[key].position ) - 1 ) then
+				if ( wayPointsIndex[key] > wayPoints[key].maxCount - 1 ) then
 					--BeamEngine:getSlot(key):queueLuaCommand("input.axisY=0;input.parkingbrake=1;input.axisY2=0.5")
 					wayPointsIndex[key] = 1
 					agentSeek(key, BeamEngine:getSlot(key), wayPoints[key].position[wayPointsIndex[key]].pos, false, wayPoints[key].position[wayPointsIndex[key]].maxSpeed)
