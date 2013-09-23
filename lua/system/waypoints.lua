@@ -66,7 +66,6 @@ end
 local function addPoint( carId, maxSpeed )
 	local playerPosition = BeamEngine:getSlot(getCurrentCarId()):getPosition()
 	initWayPointsArr( carId )
-	--local index = getLastIndex( wayPoints[carId].position )
 	local index = wayPoints[carId].maxCount
 	wayPoints[carId].position[index] = {}
 	wayPoints[carId].position[index].pos = playerPosition
@@ -78,8 +77,7 @@ end
 local function recordPoint()	
 	local carId = getCurrentCarId()
 	--initWayPointsArr( carId )
-	local playerPosition = BeamEngine:getSlot(carId):getPosition()	
-	--local oldIndex = getLastIndex( wayPoints[carId].position ) - 1
+	local playerPosition = BeamEngine:getSlot(carId):getPosition()
 	local oldIndex = wayPoints[carId].maxCount - 1
 	local oldX = wayPoints[carId].position[oldIndex].pos["x"]
 	local oldY = wayPoints[carId].position[oldIndex].pos["y"]
@@ -424,7 +422,6 @@ local function saveWayPoints( carId, fileName )
 		fileSt.position[key].pos["y"] = y
 		fileSt.position[key].pos["z"] = z
 		fileSt.position[key].maxSpeed = wayPoints[carId].position[key].maxSpeed
-		--print("x = "..x..", y = "..y..", z = "..z)
 	end
 	table.save( fileSt, "Waypoints/"..fileName..".lua" )
 	print("WayPoints saved!")
@@ -513,7 +510,6 @@ local function update()
 			
 			if ( ( newPos["x"] >= newPos2["x"] and newPos["y"] >= newPos2["y"] and newPos["z"] >= newPos2["z"] ) and ( newPos["x"] <= newPos1["x"] and newPos["y"] <= newPos1["y"] and newPos["z"] <= newPos1["z"] ) and go ~= 0 ) then
 				wayPointsIndex[key] = wayPointsIndex[key] + 1
-				--if ( wayPointsIndex[key] > getLastIndex( wayPoints[key].position ) - 1 ) then
 				if ( wayPointsIndex[key] > wayPoints[key].maxCount - 1 ) then
 					--BeamEngine:getSlot(key):queueLuaCommand("input.axisY=0;input.parkingbrake=1;input.axisY2=0.5")
 					wayPointsIndex[key] = 1
