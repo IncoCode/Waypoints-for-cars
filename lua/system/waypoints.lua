@@ -3,7 +3,7 @@
 -- file, You can obtain one at http://beamng.com/bCDDL-1.1.txt
 
 -- Mod by Incognito
--- Version: 1.0.2
+-- Version: 1.0.3
 -- Link on the thread: http://www.beamng.com/threads/2947-Waypoints-%28paths%29-for-cars
 
 local M = {}
@@ -54,7 +54,7 @@ local function clearCarWayPoints( carId )
 end
 
 local function initWayPointsArr( carId )
-	if ( wayPoints[carId] == nil ) then
+	if ( wayPoints[carId] == nil ) then		
 		wayPoints[carId] = {}
 		wayPoints[carId].position = {}
 		if ( canCarRun[carId] == nil ) then
@@ -71,6 +71,7 @@ local function addPoint( carId, maxSpeed )
 	wayPoints[carId].position[index] = {}
 	wayPoints[carId].position[index].pos = playerPosition
 	wayPoints[carId].position[index].maxSpeed = maxSpeed
+	wayPoints[carId].maxCount = wayPoints[carId].maxCount + 1
 	print("Point added!")
 end
 
@@ -110,8 +111,9 @@ local function startRecordingPath()
 	if ( recordEnabled == 0 ) then
 		local carId = getCurrentCarId()
 		clearCarWayPoints( carId )
+		initWayPointsArr( carId )
 		wayPoints[carId].maxCount = 1
-		addPoint( carId, 15 )
+		addPoint( carId, 15 )		
 		recordEnabled = 1
 		print("Path recording enabled!")
 	else
