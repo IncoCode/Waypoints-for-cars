@@ -529,6 +529,13 @@ local function disableSkipPoints()
 	skipPointEnabled = 0
 end
 
+local function runAllCars()
+    print("Attempting to run all cars")
+    for key in pairs(wayPoints) do
+        runCar(key)
+    end
+end
+
 -- public interface
 M.update               = update
 M.reset                = reset
@@ -545,5 +552,7 @@ M.stopRecordingPath    = stopRecordingPath
 M.stopCar              = stopCar
 M.enableSkipPoints     = enableSkipPoints
 M.disableSkipPoints    = disableSkipPoints
+M.runAllCars           = runAllCars
+M.runCars              = runAllCars
 
 return M
