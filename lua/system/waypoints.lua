@@ -491,7 +491,7 @@ local function update()
 			local newPos1 = wayPoints[key].position[wayPointsIndex[key]].pos + float3(coorDiff, coorDiff, coorDiff)
 			local newPos2 = wayPoints[key].position[wayPointsIndex[key]].pos + float3(-coorDiff, -coorDiff, -coorDiff)
 			
-			if ( skipPointEnabled == 1 ) then
+			if ( skipPointEnabled == 1 and wayPointsIndex[key] ~= 1 ) then
 				local i = wayPointsIndex[key]
 				local distance  = (wayPoints[key].position[i].pos - newPos):length()			
 				if ( wayPoints[key].position[i + 1] == nil ) then
