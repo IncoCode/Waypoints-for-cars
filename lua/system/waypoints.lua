@@ -124,6 +124,27 @@ local function stopRecordingPath()
 	print("Path recording disabled!")
 end
 
+local function isCarAround( pos, currentId )
+	local slotCount = BeamEngine:getSlotCount()
+	local result = 0
+	local newPos1 = pos + float3(4, 0, 0)
+	local newPos2 = pos + float3(-4, -0, -0)
+	local newPos = float3(0, 0, 0)
+	for objectID = 0, slotCount - 1, 1 do
+		local b = BeamEngine:getSlot(objectID)
+		if ( currentId ~= objectID ) then
+			newPos = b:getPosition()
+			--if ( ( newPos["x"] >= newPos2["x"] or newPos["y"] >= newPos2["y"] or newPos["z"] >= newPos2["z"] ) or ( newPos["x"] <= newPos1["x"] or newPos["y"] <= newPos1["y"] or newPos["z"] <= newPos1["z"] ) ) then
+			if ( ( newPos["x"] >= newPos2["x"] ) and ( newPos["x"] <= newPos1["x"] ) and ( newPos["y"] <= pos["y"] ) ) then
+				result = 1
+				break
+			end
+		end
+	end
+	--newPos = newPos + float3(3, 0, 0)
+	do return result, newPos end
+end
+
 local function agentSeek( id, agent, targetPos, flee, maxSpeed )	
 	if agents[id] == nil then		
 		-- init persistent data
@@ -138,8 +159,15 @@ local function agentSeek( id, agent, targetPos, flee, maxSpeed )
 	ad.velo = agent:getVelocity()
 	ad.velo = ad.velo:length()
 	--print("target="..targetPos)
+		
+	local ca, cPos = isCarAround( targetPos, id )
+	if ( ca == 1 ) then
+		targetPos = cPos
+		print("work")
+	end
+	local targetVector = targetPos - ad.pos
 	
-	local targetVector = targetPos - ad.pos	
+	--local targetVector = targetPos - ad.pos
 	local distance = targetVector:length()
 	--print(distance)
 	
@@ -405,7 +433,11 @@ local function agentSeek( id, agent, targetPos, flee, maxSpeed )
 	
 	-- tell the agent how to move finally
 	local luaCommand = "input.event(\"axisx0\", %f, 1);input.event(\"axisy0\", %f, 1);input.event(\"axisy1\", %f, 1); input.event(\"axisy2\", %d, 1)"
+	if ( ca == 1 ) then
+		throttle = 0.8
+	end
 	agent:queueLuaCommand( string.format(luaCommand, -steer, throttle, brake, 0) )
+	print("steer = "..steer)
 end
 
 local function saveWayPoints( carId, fileName )
@@ -507,6 +539,7 @@ local function update()
 				end
 				wayPointsIndex[key] = i
 			end
+			--print("index = "..wayPointsIndex[key].."/"..wayPoints[key].maxCount - 1)
 			
 			if ( ( newPos["x"] >= newPos2["x"] and newPos["y"] >= newPos2["y"] and newPos["z"] >= newPos2["z"] ) and ( newPos["x"] <= newPos1["x"] and newPos["y"] <= newPos1["y"] and newPos["z"] <= newPos1["z"] ) and go ~= 0 ) then
 				wayPointsIndex[key] = wayPointsIndex[key] + 1
@@ -529,13 +562,6 @@ local function disableSkipPoints()
 	skipPointEnabled = 0
 end
 
-local function runAllCars()
-    print("Attempting to run all cars")
-    for key in pairs(wayPoints) do
-        runCar(key)
-    end
-end
-
 -- public interface
 M.update               = update
 M.reset                = reset
@@ -552,7 +578,5 @@ M.stopRecordingPath    = stopRecordingPath
 M.stopCar              = stopCar
 M.enableSkipPoints     = enableSkipPoints
 M.disableSkipPoints    = disableSkipPoints
-M.runAllCars           = runAllCars
-M.runCars              = runAllCars
 
 return M
