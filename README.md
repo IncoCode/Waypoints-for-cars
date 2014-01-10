@@ -1,9 +1,5 @@
-Возможности:
+This mod allows you to run cars by waypoints (paths). Using the current **simpleAI**.
 
-  - авто ездят по указанным точкам;
+Instruction in **Help.zip** . Extract this archive and run **index.html** in your browser.
 
-  - управление через консоль;
-
-  - присутствует возможность сохранять и загружать вэйпоинты для автомобиля (по id).
-
-Автор: Incognito
+Correct work is not guaranteed. Sometimes cars can refuse to go on your paths and get away from you (not yet found the cause; probably, it occurs when two cars stand nearby) and etc.
