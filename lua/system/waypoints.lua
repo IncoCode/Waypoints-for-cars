@@ -3,7 +3,7 @@
 -- file, You can obtain one at http://beamng.com/bCDDL-1.1.txt
 
 -- Mod by Incognito
--- Version: 1.0.3
+-- Version: 1.0.4
 -- Link on the thread: http://www.beamng.com/threads/2947-Waypoints-%28paths%29-for-cars
 
 local M = {}
@@ -402,6 +402,9 @@ local function agentSeek( id, agent, targetPos, flee, maxSpeed )
 	if ( brake > 1 ) then brake = 1 end
 	if steer < -1 then steer = -1 end
 	if steer > 1 then steer = 1 end
+	if reverse == true then
+		throttle = -1
+	end
 	
 	-- tell the agent how to move finally
 	local luaCommand = "input.event(\"axisx0\", %f, 1);input.event(\"axisy0\", %f, 1);input.event(\"axisy1\", %f, 1); input.event(\"axisy2\", %d, 1)"
