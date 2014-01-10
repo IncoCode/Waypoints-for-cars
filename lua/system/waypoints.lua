@@ -533,9 +533,10 @@ local function disableSkipPoints()
 end
 
 local function runAllCars()
-    print("Attempting to run all cars")
-    for key in pairs(wayPoints) do
-        runCar(key)
+    print( "Attempting to run all cars..." )
+    for key in pairs( wayPoints ) do
+        runCar( key )
+        print( "Car "..key.." was run!" )
     end
 end
 
