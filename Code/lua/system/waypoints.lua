@@ -57,6 +57,7 @@ local function initWayPointsArr( carId )
 	if ( wayPoints[carId] == nil ) then		
 		wayPoints[carId] = {}
 		wayPoints[carId].position = {}
+		wayPoints[carId].maxCount = 0
 		if ( canCarRun[carId] == nil ) then
 			canCarRun[carId] = 0
 		end
