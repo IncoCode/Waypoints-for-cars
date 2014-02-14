@@ -3,7 +3,7 @@
 -- file, You can obtain one at http://beamng.com/bCDDL-1.1.txt
 
 -- Mod by Incognito
--- Version: 1.0.4
+-- Version: 1.0.5
 -- Link on the thread: http://www.beamng.com/threads/2947-Waypoints-%28paths%29-for-cars
 
 local M = {}
