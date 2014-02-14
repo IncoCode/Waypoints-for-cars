@@ -1,0 +1,71 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+   <title>Installation</title>
+   <meta name="generator" content="Help &amp; Manual" />
+   <meta name="keywords" content="" />
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <link type="text/css" href="default.css" rel="stylesheet" />
+   <style type="text/css">
+     body { margin: 0px; background: #FFFFFF; }
+   </style>
+   <script type="text/javascript" src="jquery.js"></script>
+   <script type="text/javascript" src="helpman_settings.js"></script>
+   <script type="text/javascript" src="helpman_topicinit.js"></script>
+
+   <script type="text/javascript">
+     HMSyncTOC("index.html", "installation.htm");
+   </script>
+   <script type="text/javascript" src="highlight.js"></script>
+   <script type="text/javascript">
+     $(document).ready(function(){highlight();});
+   </script>
+</head>
+<body>
+
+
+<table style="width:100%; border:none; border-spacing:0px; padding:5px; background:#C0C0C0">
+  <tr style="vertical-align:middle">
+    <td style="text-align:left">
+      <h1 class="p_Heading1"><span class="f_Heading1">Installation</span></h1>
+
+    </td>
+    <td style="text-align:right">
+     <a href="introduction.htm">Top</a>&nbsp;
+     <a href="welcome_topic.htm">Previous</a>&nbsp;
+     <a href="manual.htm">Next</a>
+    </td>
+  </tr>
+</table>
+
+
+<!-- Placeholder for topic body. -->
+<table style="width:100%;border:none;border-spacing:0px"><tr style="vertical-align:top"><td style="text-align:left;padding:5px">
+<p><span style="font-size: 12pt; font-weight: bold;">Automatical installations</span></p>
+<p>Unpack the &quot;<span style="text-decoration: underline;">InstallScript</span>&quot; archive, in <a href="http://www.beamng.com/threads/3885-Lua-mod-installer?p=42496&amp;viewfull=1#post42496" target="_blank" class="weblink">BeamNG Lua-mod Installer</a> select <span style="font-weight: bold;">wp.bls</span> and press &quot;<span style="text-decoration: underline;">Install</span>&quot; button.</p>
+<p>&nbsp;</p>
+<p><span style="font-size: 12pt; font-weight: bold;">Manual installations</span></p>
+<p style="text-align: left; padding: 0px 0px 0px 15px; margin: 0px 0px 0px 0px;"><span style="font-size:10pt; font-family: 'Arial';color:#000000;display:inline-block;width:15px;margin-left:-15px">1.</span>Unzip the downloaded archive into the game folder.</p><p style="text-align: left; padding: 0px 0px 0px 15px; margin: 0px 0px 0px 0px;"><span style="font-size:10pt; font-family: 'Arial';color:#000000;display:inline-block;width:15px;margin-left:-15px">2.</span>Open <span style="font-weight: bold;">game_folder\lua\system\main.lua</span> and after:<br />
+&nbsp;<br />
+<span style="font-style: italic;">json &nbsp; &nbsp; &nbsp;= require(&quot;json&quot;)</span><br />
+<span style="font-style: italic;">&nbsp;</span><br />
+add (with a new line):<br />
+&nbsp;<br />
+<span style="font-style: italic;">wayPoints = require(&quot;waypoints&quot;)</span><br />
+<span style="font-style: italic;">&nbsp;</span><br />
+<span style="font-style: italic;">enableWayPoints = 1</span></p><p style="text-align: left; padding: 0px 0px 0px 15px; margin: 0px 0px 0px 0px;"><span style="font-size:10pt; font-family: 'Arial';color:#000000;display:inline-block;width:15px;margin-left:-15px">3.</span>After:<br />
+<span style="font-style: italic;">raceTimer = raceTimer + dt</span><br />
+<span style="font-style: italic;">&nbsp;</span><br />
+add (with a new line):<br />
+&nbsp;<br />
+<span style="font-style: italic;">if ( enableWayPoints ~= 0 ) then</span><br />
+<span style="font-style: italic;">wayPoints.update()</span><br />
+<span style="font-style: italic;">end</span></p><p><img src="1.png" width="335" height="237" alt="1" style="border:none" /></p>
+<p>&nbsp;</p>
+<p><img src="2.png" width="479" height="340" alt="2" style="border:none" /></p>
+
+</td></tr></table>
+
+</body>
+</html>

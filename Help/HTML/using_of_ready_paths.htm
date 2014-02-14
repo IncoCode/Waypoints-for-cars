@@ -1,0 +1,54 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+   <title>Run car by a path</title>
+   <meta name="generator" content="Help &amp; Manual" />
+   <meta name="keywords" content="" />
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <link type="text/css" href="default.css" rel="stylesheet" />
+   <style type="text/css">
+     body { margin: 0px; background: #FFFFFF; }
+   </style>
+   <script type="text/javascript" src="jquery.js"></script>
+   <script type="text/javascript" src="helpman_settings.js"></script>
+   <script type="text/javascript" src="helpman_topicinit.js"></script>
+
+   <script type="text/javascript">
+     HMSyncTOC("index.html", "using_of_ready_paths.htm");
+   </script>
+   <script type="text/javascript" src="highlight.js"></script>
+   <script type="text/javascript">
+     $(document).ready(function(){highlight();});
+   </script>
+</head>
+<body>
+
+
+<table style="width:100%; border:none; border-spacing:0px; padding:5px; background:#C0C0C0">
+  <tr style="vertical-align:middle">
+    <td style="text-align:left">
+      <h1 class="p_Heading1"><span class="f_Heading1">Run car by a path</span></h1>
+
+    </td>
+    <td style="text-align:right">
+     <a href="introduction.htm">Top</a>&nbsp;
+     <a href="creating_paths.htm">Previous</a>&nbsp;
+     <a href="additional_console_commands.htm">Next</a>
+    </td>
+  </tr>
+</table>
+
+
+<!-- Placeholder for topic body. -->
+<table style="width:100%;border:none;border-spacing:0px"><tr style="vertical-align:top"><td style="text-align:left;padding:5px">
+<p style="text-align: left; padding: 0px 0px 0px 15px; margin: 0px 0px 0px 0px;"><span style="font-size:10pt; font-family: 'Arial';color:#000000;display:inline-block;width:15px;margin-left:-15px">1.</span>Put the car somewhere near the starting point of path (but not too close).</p><p style="text-align: left; padding: 0px 0px 0px 15px; margin: 0px 0px 0px 0px;"><span style="font-size:10pt; font-family: 'Arial';color:#000000;display:inline-block;width:15px;margin-left:-15px">2.</span>Open the console (<a href="bngs_mode.htm" class="topiclink">choose BNGS mode</a>), invoke the command:<br />
+<span style="font-style: italic;">wayPoints.loadWayPoints(</span><span style="font-style: italic; text-decoration: underline;">carId</span><span style="font-style: italic;">, &quot;</span><span style="font-style: italic; text-decoration: underline;">filename</span><span style="font-style: italic;">&quot;)</span><br />
+Where <span style="text-decoration: underline;">carId</span> - is id car for which to load the path (<a href="additional_console_commands.htm" class="topiclink">how to get car id</a>); <span style="text-decoration: underline;">filename</span> - file name with the paths.</p><p style="text-align: left; padding: 0px 0px 0px 15px; margin: 0px 0px 0px 0px;"><span style="font-size:10pt; font-family: 'Arial';color:#000000;display:inline-block;width:15px;margin-left:-15px">3.</span>In the console invoke the command:<br />
+<span style="font-style: italic;">wayPoints.runCar(</span><span style="font-style: italic; text-decoration: underline;">carId</span><span style="font-style: italic;">)</span></p><p>&nbsp;</p>
+<p><span style="font-weight: bold;">Waypoints stores in </span><span style="font-weight: bold; text-decoration: underline;">game_folder\Waypoints\</span>.</p>
+
+</td></tr></table>
+
+</body>
+</html>

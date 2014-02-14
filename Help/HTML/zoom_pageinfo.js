@@ -1,0 +1,16 @@
+pageinfo = [[0,0,0,0,null],
+	[0,0,0,0,null],
+	[0,0,0,0,null],
+	[0,0,0,0,null],
+	[0,0,0,0,null],
+	[0,0,0,0,null],
+	[0,0,0,0,null],
+	[0,0,0,0,null]];
+pagedata = [ ["additional_console_commands.htm","Additional console commands","Additional console commands Top Previous Next wayPoints.printWayPointsForCar(carId) - print all points for car. wayPoints.printCurrentCarId() - pr...",""],
+["bngs_mode.htm","BNGS Mode","BNGS Mode Top Previous Chose it here: ",""],
+["creating_paths.htm","Creating paths","Creating paths Top Previous Next 1.Invent a path :) 2.Go to the starting place. 3.In the console ( choose BNGS mode ) invoke the command: wayPoint...",""],
+["installation.htm","Installation","Installation Top Previous Next Automatical installations Unpack the \"InstallScript\" archive, in BeamNG Lua-mod Installer select wp.bls and press \"...",""],
+["introduction.htm","Introduction","Introduction Top Next Manual version: 1.0.3 For script version: 1.0.4 - 1.0.5 By Incognito . Forum thread ",""],
+["manual.htm","Manual","Manual Top Previous Next ",""],
+["using_of_ready_paths.htm","Run car by a path","Run car by a path Top Previous Next 1.Put the car somewhere near the starting point of path (but not too close). 2.Open the console ( choose BNGS ...",""],
+["welcome_topic.htm","Welcome topic","Welcome topic Top Previous Next This is mod that allows you to run cars by waypoints. Using the current simpleAI. You can download it here: http:/...",""]];

@@ -1,0 +1,73 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+   <title>Creating paths</title>
+   <meta name="generator" content="Help &amp; Manual" />
+   <meta name="keywords" content="" />
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <link type="text/css" href="default.css" rel="stylesheet" />
+   <style type="text/css">
+     body { margin: 0px; background: #FFFFFF; }
+   </style>
+   <script type="text/javascript" src="jquery.js"></script>
+   <script type="text/javascript" src="helpman_settings.js"></script>
+   <script type="text/javascript" src="helpman_topicinit.js"></script>
+
+   <script type="text/javascript">
+     HMSyncTOC("index.html", "creating_paths.htm");
+   </script>
+   <script type="text/javascript" src="highlight.js"></script>
+   <script type="text/javascript">
+     $(document).ready(function(){highlight();});
+   </script>
+</head>
+<body>
+
+
+<table style="width:100%; border:none; border-spacing:0px; padding:5px; background:#C0C0C0">
+  <tr style="vertical-align:middle">
+    <td style="text-align:left">
+      <h1 class="p_Heading1"><span class="f_Heading1">Creating paths</span></h1>
+
+    </td>
+    <td style="text-align:right">
+     <a href="introduction.htm">Top</a>&nbsp;
+     <a href="manual.htm">Previous</a>&nbsp;
+     <a href="using_of_ready_paths.htm">Next</a>
+    </td>
+  </tr>
+</table>
+
+
+<!-- Placeholder for topic body. -->
+<table style="width:100%;border:none;border-spacing:0px"><tr style="vertical-align:top"><td style="text-align:left;padding:5px">
+<p style="text-align: left; padding: 0px 0px 0px 15px; margin: 0px 0px 0px 0px;"><span style="font-size:10pt; font-family: 'Arial';color:#000000;display:inline-block;width:15px;margin-left:-15px">1.</span>Invent a path :)</p><p style="text-align: left; padding: 0px 0px 0px 15px; margin: 0px 0px 0px 0px;"><span style="font-size:10pt; font-family: 'Arial';color:#000000;display:inline-block;width:15px;margin-left:-15px">2.</span>Go to the starting place.</p><p style="text-align: left; padding: 0px 0px 0px 15px; margin: 0px 0px 0px 0px;"><span style="font-size:10pt; font-family: 'Arial';color:#000000;display:inline-block;width:15px;margin-left:-15px">3.</span>In the console (<a href="bngs_mode.htm" class="topiclink">choose BNGS mode</a>) invoke the command:<br />
+<span style="font-style: italic;">wayPoints.addPoint(</span><span style="font-style: italic; text-decoration: underline;">carId</span><span style="font-style: italic;">, </span><span style="font-style: italic; text-decoration: underline;">speed</span><span style="font-style: italic;">)</span><br />
+Where <span style="text-decoration: underline;">carId</span> - is id car for which the path creates (<a href="additional_console_commands.htm" class="topiclink">how to get car id</a>); <span style="text-decoration: underline;">speed</span> - with what speed follow to that point (in km/h).</p><p style="text-align: left; padding: 0px 0px 0px 15px; margin: 0px 0px 0px 0px;"><span style="font-size:10pt; font-family: 'Arial';color:#000000;display:inline-block;width:15px;margin-left:-15px">4.</span>Now every few tens of meters invoke this command :)</p><p style="text-align: left; padding: 0px 0px 0px 15px; margin: 0px 0px 0px 0px;"><span style="font-size:10pt; font-family: 'Arial';color:#000000;display:inline-block;width:15px;margin-left:-15px">5.</span>After creating a path save this path:<br />
+<span style="font-style: italic;">wayPoints.saveWayPoints(carId, &quot;filename&quot;)</span></p><p>&nbsp;</p>
+<p><span style="font-weight: bold; text-decoration: underline;">Notice: after the vehicle has overcome the last point - he will begin his path to the first point.</span></p>
+<p>&nbsp;</p>
+<p><span style="font-weight: bold;">Waypoints stores in </span><span style="font-weight: bold; text-decoration: underline;">game_folder\Waypoints\</span>.</p>
+<p>&nbsp;</p>
+<p><span style="font-weight: bold;">Do smooth acceleration of the vehicle! That is, If you want to accelerate the car to a speed of 80 km/h, do it like this:</span></p>
+<p><span style="font-weight: bold;">First point: wayPoints.addPoint(1, 15)</span></p>
+<p><span style="font-weight: bold;">After few tens of meters: wayPoints.addPoint(1, 30)</span></p>
+<p><span style="font-weight: bold;">After few tens of meters: wayPoints.addPoint(1, 50)</span></p>
+<p><span style="font-weight: bold;">After few tens of meters: wayPoints.addPoint(1, 65)</span></p>
+<p><span style="font-weight: bold;">After few tens of meters: wayPoints.addPoint(1, 75)</span></p>
+<p><span style="font-weight: bold;">After few tens of meters: wayPoints.addPoint(1, 80)</span></p>
+<p><span style="font-weight: bold;">In this case, the car will accelerate smoothly and does not lose control.</span></p>
+<p>&nbsp;</p>
+<p>A video:</p>
+<div><div style="width:320px;height:195px;padding:0px;cursor:pointer"><div style="width:320px;height:195px;background:#000" onclick="javascript:HMShowVideoLightbox(event, this, '&lt;object width=&quot;640&quot; height=&quot;390&quot;&gt; &nbsp; &lt;param name=&quot;clsid&quot; value=&quot;D27CDB6E-AE6D-11cf-96B8-444553540000&quot; /&gt; 	&lt;param name=&quot;movie&quot; value=&quot;http://www.youtube.com/v/Oy64R2B30x4?version=3&quot; /&gt; 	&lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt; 	&lt;param name=&quot;allowScriptAccess&quot; value=&quot;always&quot; /&gt; 	&lt;embed src=&quot;http://www.youtube.com/v/Oy64R2B30x4?version=3&quot; 	 &nbsp; &nbsp; &nbsp; type=&quot;application/x-shockwave-flash&quot; 	 &nbsp; &nbsp; &nbsp; allowfullscreen=&quot;true&quot; 	 &nbsp; &nbsp; &nbsp; allowScriptAccess=&quot;always&quot; 	 &nbsp; &nbsp; &nbsp; width=&quot;640&quot; 	 &nbsp; &nbsp; &nbsp; height=&quot;390&quot; /&gt; &lt;/object&gt;',640,390)" ><img src="cicon_video_playbutton.png" style="margin:45px 109px;width:102px;height:104px;border:none" /></div></div></div>
+<p>&nbsp;</p>
+<p style="text-align: center;"><span style="font-size: 15pt; font-weight: bold;">Automatic creation of paths</span></p>
+<p style="text-align: left; padding: 0px 0px 0px 15px; margin: 0px 0px 0px 0px;"><span style="font-size:10pt; font-family: 'Arial';color:#000000;display:inline-block;width:15px;margin-left:-15px">1.</span>Invent a path :)</p><p style="text-align: left; padding: 0px 0px 0px 15px; margin: 0px 0px 0px 0px;"><span style="font-size:10pt; font-family: 'Arial';color:#000000;display:inline-block;width:15px;margin-left:-15px">2.</span>Go to starting place.</p><p style="text-align: left; padding: 0px 0px 0px 15px; margin: 0px 0px 0px 0px;"><span style="font-size:10pt; font-family: 'Arial';color:#000000;display:inline-block;width:15px;margin-left:-15px">3.</span>In the console (<a href="bngs_mode.htm" class="topiclink">choose BNGS mode</a>) invoke the command:<br />
+<span style="font-style: italic;">wayPoints.startRecordingPath()</span></p><p style="text-align: left; padding: 0px 0px 0px 15px; margin: 0px 0px 0px 0px;"><span style="font-size:10pt; font-family: 'Arial';color:#000000;display:inline-block;width:15px;margin-left:-15px">4.</span>Start going :)</p><p style="text-align: left; padding: 0px 0px 0px 15px; margin: 0px 0px 0px 0px;"><span style="font-size:10pt; font-family: 'Arial';color:#000000;display:inline-block;width:15px;margin-left:-15px">5.</span>At the end of your trip invoke the command:<br />
+<span style="font-style: italic;">wayPoints.stopRecordingPath()</span></p><p style="text-align: left; padding: 0px 0px 0px 15px; margin: 0px 0px 0px 0px;"><span style="font-size:10pt; font-family: 'Arial';color:#000000;display:inline-block;width:15px;margin-left:-15px">6.</span>And save this path:<br />
+<span style="font-style: italic;">wayPoints.saveWayPoints(carId, &quot;filename&quot;)</span></p>
+</td></tr></table>
+
+</body>
+</html>
