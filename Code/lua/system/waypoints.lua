@@ -408,8 +408,10 @@ local function agentSeek( id, agent, targetPos, flee, maxSpeed )
 	end
 	
 	-- tell the agent how to move finally
-	local luaCommand = "input.event(\"axisx0\", %f, 1);input.event(\"axisy0\", %f, 1);input.event(\"axisy1\", %f, 1); input.event(\"axisy2\", %d, 1)"
-	agent:queueLuaCommand( string.format(luaCommand, -steer, throttle, brake, 0) )
+	agent:queueLuaCommand("input.event(\"axisx0\", "..-steer..", 0)")
+    agent:queueLuaCommand("input.event(\"axisy0\", "..throttle..", 0)")
+    agent:queueLuaCommand("input.event(\"axisy1\", "..brake..", 0)")
+    agent:queueLuaCommand("input.event(\"axisy2\", 0, 0)")
 end
 
 local function saveWayPoints( carId, fileName )
