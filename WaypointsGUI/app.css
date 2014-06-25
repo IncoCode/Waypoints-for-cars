@@ -1,4 +1,4 @@
-#popup_box {
+#popup_box, #popup_box2 {
     display:none; /* Hide the DIV */
     position:fixed;
     height:180px;  
@@ -15,6 +15,6 @@
     height:100%;
 }
 
-#saveWayPoints, #closeSaveForm {
+button, #saveWayPoints, #closeSaveForm {
 	width: 98%;
 }

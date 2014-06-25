@@ -3,7 +3,7 @@
 -- file, You can obtain one at http://beamng.com/bCDDL-1.1.txt
 
 -- Mod by Incognito
--- Version: 1.0.6
+-- Version: 1.0.4
 -- Link on the thread: http://www.beamng.com/threads/2947-Waypoints-%28paths%29-for-cars
 
 local M = {}
@@ -407,7 +407,7 @@ local function agentSeek( id, agent, targetPos, flee, maxSpeed )
 		throttle = -1
 	end
 	
-	-- tell the agent how to move finally
+	-- tell the agent how to move finally		
 	agent:queueLuaCommand("input.event(\"axisx0\", "..-steer..", 0)")
     agent:queueLuaCommand("input.event(\"axisy0\", "..throttle..", 0)")
     agent:queueLuaCommand("input.event(\"axisy1\", "..brake..", 0)")
@@ -543,6 +543,41 @@ local function runAllCars()
     end
 end
 
+local function getCarsId()
+	local slotCount = BeamEngine:getSlotCount()
+	local result = {}
+	for objectID = 0, slotCount, 1 do
+		local b = BeamEngine:getSlot( objectID )
+		if b ~= nil then
+			result[objectID] = 1
+			if b.activationMode == 1 then
+				result['selected'] = objectID
+			end
+		end
+	end	
+	do return result end
+end
+
+local function getWaypointsFiles()
+	local directory = "Waypoints"
+	local dir = FS:openDirectory( directory )
+	local waypointsFiles = {}
+	if dir then
+        local file = nil        
+        repeat
+            file = dir:getNextFilename()			
+            if not file then break end
+            if string.find( file, ".lua" ) then
+                if FS:fileExists( directory.."/"..file ) > 0 then
+                    table.insert( waypointsFiles, file:sub( 1 , -5 ) )
+                end
+            end
+        until not file
+        FS:closeDirectory( dir )
+	end
+	do return waypointsFiles end
+end
+
 -- public interface
 M.update               = update
 M.reset                = reset
@@ -561,5 +596,7 @@ M.enableSkipPoints     = enableSkipPoints
 M.disableSkipPoints    = disableSkipPoints
 M.runAllCars           = runAllCars
 M.runCars              = runAllCars
+M.getCarsId            = getCarsId
+M.getWaypointsFiles    = getWaypointsFiles
 
 return M
