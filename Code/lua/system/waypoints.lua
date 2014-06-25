@@ -3,7 +3,7 @@
 -- file, You can obtain one at http://beamng.com/bCDDL-1.1.txt
 
 -- Mod by Incognito
--- Version: 1.0.4
+-- Version: 1.0.6
 -- Link on the thread: http://www.beamng.com/threads/2947-Waypoints-%28paths%29-for-cars
 
 local M = {}
@@ -407,7 +407,7 @@ local function agentSeek( id, agent, targetPos, flee, maxSpeed )
 		throttle = -1
 	end
 	
-	-- tell the agent how to move finally		
+	-- tell the agent how to move finally
 	agent:queueLuaCommand("input.event(\"axisx0\", "..-steer..", 0)")
     agent:queueLuaCommand("input.event(\"axisy0\", "..throttle..", 0)")
     agent:queueLuaCommand("input.event(\"axisy1\", "..brake..", 0)")
