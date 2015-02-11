@@ -1,8 +1,8 @@
 function WaypointsGUI(){}
 
 WaypointsGUI.prototype.initialize = function(){	
-	$('<div id="popup_box" hidden></div>').appendTo(this.rootElement);
-	$('<div id="popup_box2" hidden></div>').appendTo(this.rootElement);
+	$('<div id="wpPopupSaveBox" hidden></div>').appendTo(this.rootElement);
+	$('<div id="wpPopupLoadBox" hidden></div>').appendTo(this.rootElement);
 	
 	$('<button>Start recording path</button>').appendTo(this.rootElement).click(function(){	
         callSystemLuaFunction("wayPoints.startRecordingPath", "");
@@ -29,7 +29,7 @@ WaypointsGUI.prototype.initialize = function(){
 				$('#carIds').append(option);
 			});			
 		});
-		$('#popup_box').fadeIn("slow");
+		$('#wpPopupSaveBox').fadeIn("slow");
     });
 	
 	// load waypoints
@@ -59,7 +59,7 @@ WaypointsGUI.prototype.initialize = function(){
 				$('#fileNames').append(option);
 			});			
 		});
-		$('#popup_box2').fadeIn("slow");
+		$('#wpPopupLoadBox').fadeIn("slow");
     });
 	
 	$('<button>Run all cars</button>').appendTo(this.rootElement).click(function(){
@@ -71,32 +71,32 @@ WaypointsGUI.prototype.initialize = function(){
     });
 	
 	// save form
-	$('#popup_box').load("apps/WaypointsGUI/saveForm.html", function() {
+	$('#wpPopupSaveBox').load("apps/WaypointsGUI/saveForm.html", function() {
 	
-		$("#saveWayPoints").click(function() {			
+		$("#wpSaveWayPoints").click(function() {			
 			var carId = $("#carIds option:selected").val();
 			var fileName = $("#fileName").val();
-			callSystemLuaFunction("wayPoints.saveWayPoints", carId +",\"" +fileName +"\"");
-			$('#popup_box').fadeOut("slow");
+			callSystemLuaFunction("wayPoints.wpSaveWayPoints", carId +",\"" +fileName +"\"");
+			$('#wpPopupSaveBox').fadeOut("slow");
 			$('#fileName').val("");
 			$('#carIds')
 				.find('option')
 				.remove();
 		});
 		
-		$("#closeSaveForm").click(function(){
-			$('#popup_box').fadeOut("slow");
+		$("#wpCloseSaveForm").click(function(){
+			$('#wpPopupSaveBox').fadeOut("slow");
 		});
 	});
 	
 	// load form
-	$('#popup_box2').load("apps/WaypointsGUI/loadForm.html", function() {
+	$('#wpPopupLoadBox').load("apps/WaypointsGUI/loadForm.html", function() {
 	
-		$("#loadWayPoints").click(function() {			
+		$("#wpLoadWayPoints").click(function() {			
 			var carId = $("#carIdsLoad option:selected").val();
 			var fileName = $("#fileNames option:selected").val();
-			callSystemLuaFunction("wayPoints.loadWayPoints", carId +",\"" +fileName +"\"");
-			$('#popup_box2').fadeOut("slow");
+			callSystemLuaFunction("wayPoints.wpLoadWayPoints", carId +",\"" +fileName +"\"");
+			$('#wpPopupLoadBox').fadeOut("slow");
 			$('#fileNames')
 				.find('option')
 				.remove();
@@ -105,8 +105,8 @@ WaypointsGUI.prototype.initialize = function(){
 				.remove();
 		});
 		
-		$("#closeLoadForm").click(function(){
-			$('#popup_box2').fadeOut("slow");
+		$("#wpCloseLoadForm").click(function(){
+			$('#wpPopupLoadBox').fadeOut("slow");
 		});
 	});
 	
