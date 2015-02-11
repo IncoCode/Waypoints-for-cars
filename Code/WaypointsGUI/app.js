@@ -66,6 +66,10 @@ WaypointsGUI.prototype.initialize = function(){
         callSystemLuaFunction("wayPoints.runAllCars", "");
     });
 	
+	$('<button>Stop all cars</button>').appendTo(this.rootElement).click(function(){
+        callSystemLuaFunction("wayPoints.stopAllCars", "");
+    });
+	
 	$('<button>Print current car id</button>').appendTo(this.rootElement).click(function(){
         callSystemLuaFunction("wayPoints.printCurrentCarId", "");
     });
