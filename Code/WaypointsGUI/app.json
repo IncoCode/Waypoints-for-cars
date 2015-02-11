@@ -4,14 +4,14 @@
         "author": "Incognito",
         "version": "0.1",
         "description": ""
-    },   
+    },
 
 	"appearance": {
         "background" : "opaque",
         "size" : {
             "initial" : [220,220]
         }
-    },	
+    },
 
     "data": {
         "streams" : ["wheelInfo"]
