@@ -99,7 +99,7 @@ WaypointsGUI.prototype.initialize = function(){
 		$("#wpLoadWayPoints").click(function() {			
 			var carId = $("#carIdsLoad option:selected").val();
 			var fileName = $("#fileNames option:selected").val();
-			callSystemLuaFunction("wayPoints.wpLoadWayPoints", carId +",\"" +fileName +"\"");
+			callSystemLuaFunction("wayPoints.loadWayPoints", carId +",\"" +fileName +"\"");
 			$('#wpPopupLoadBox').fadeOut("slow");
 			$('#fileNames')
 				.find('option')

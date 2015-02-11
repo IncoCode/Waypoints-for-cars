@@ -1,21 +1,16 @@
-#popup_box, #popup_box2 {
-    display:none; /* Hide the DIV */
-    position:fixed;
-    height:180px;  
-    width:170px;  
-    background: #dddddd;
-	margin-left: auto ;
-	margin-right: auto ;
-    z-index:100;
+.app .WaypointsGUI #wpPopupLoadBox, #wpPopupSaveBox {
+    display: none; /* Hide the DIV */
+    position: fixed;
+    height: 101%;
+    width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+    z-index: 100;
 	border-radius: 7px;
+	overflow: hidden;
+	position: relative;
 }
 
-#container {
-    background: #f9f9f9; /*Sample*/
-    width:100%;
-    height:100%;
-}
-
-button, #saveWayPoints, #closeSaveForm {
-	width: 98%;
+.app select, .app input, .app button{
+	width: 99%;
 }
