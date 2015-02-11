@@ -483,6 +483,14 @@ local function stopCar( carId )
 	end
 end
 
+local function stopAllCars()
+	print( "Attempting to stop all cars..." )
+    for key in pairs( wayPoints ) do
+        stopCar( key )
+        print( "Car "..key.." was stopped!" )
+    end
+end
+
 local function update()
 	if ( recordEnabled == 1 ) then
 		recordPoint()
@@ -598,5 +606,6 @@ M.runAllCars           = runAllCars
 M.runCars              = runAllCars
 M.getCarsId            = getCarsId
 M.getWaypointsFiles    = getWaypointsFiles
+M.stopAllCars		   = stopAllCars
 
 return M
