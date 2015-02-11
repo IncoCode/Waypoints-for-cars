@@ -480,6 +480,9 @@ local function runCar( carId )
 	if ( wayPoints[carId] == nil ) then
 		print("Load waypoints for this car!")
 	else
+		if agents[id] ~= nil then
+			agents[carId].stopped = 0
+		end
 		canCarRun[carId] = 1
 		wayPoints[carId].maxCount = getLastIndex( wayPoints[carId].position )
 		print("Car was run!")
