@@ -310,30 +310,30 @@ local function agentSeek( id, agent, targetPos, flee, maxSpeed )
 	end	
 	
 	--if far enough away, forget about reversing and just turn around
-	if ad.tooFar > 250 then
-		reverse = false
-		steer = math.pi/(math.pi - absDirDiff) * steer
-		throttle = ((math.pi - absDirDiff)/math.pi) - (absDirDiff * 0.2)
-		if absDirDiff > 0.3 then 
-			throttle = 0.6 
-		else
-			throttle = 1
-		end
-	end
+	--if ad.tooFar > 250 then
+		--reverse = false
+		--steer = math.pi/(math.pi - absDirDiff) * steer
+		--throttle = ((math.pi - absDirDiff)/math.pi) - (absDirDiff * 0.2)
+		--if absDirDiff > 0.3 then 
+			--throttle = 0.6 
+		--else
+			--throttle = 1
+		--end
+	--end
 	
 	--reset the variable
 	if ad.stopped > 100 then ad.stopped = 0 end
 	
 	--have it escape
-	if flee == true then
-		if absDirDiff > 3 then
-			reverse = true
-			steer = (math.pi - absDirDiff) * steer
-		end
-		if absDirDiff > 1 and absDirDiff <= 3 then
-			steer = math.random(-1,1) * steer
-		end
-	end
+	--if flee == true then
+		--if absDirDiff > 3 then
+			--reverse = true
+			--steer = (math.pi - absDirDiff) * steer
+		--end
+		--if absDirDiff > 1 and absDirDiff <= 3 then
+			--steer = math.random(-1,1) * steer
+		--end
+	--end
 	
 	--traction control
 	--[[
@@ -393,7 +393,7 @@ local function agentSeek( id, agent, targetPos, flee, maxSpeed )
 		end		
 	end
 	if ( math.abs(steer) >= 0.15 and carSpeed / maxSpeed <= 0.75 ) then
-		throttle = 0.2
+		throttle = 0.35
 		if ( carSpeed > 25 ) then			
 			brake = 0.8
 		end
@@ -405,9 +405,19 @@ local function agentSeek( id, agent, targetPos, flee, maxSpeed )
 	if steer > 1 then steer = 1 end
 	if reverse == true then
 		throttle = -1
+		brake = 0.7		
+        throttle = 0		
 	end
 	
 	-- tell the agent how to move finally
+	--print("throttle = "..throttle)
+	--print("brake = "..brake)
+	--print("stopped = "..ad.stopped)
+	--if reverse == true then
+		--print("reverse = true")	
+	--else
+		--print("reverse = false")
+	--end
 	agent:queueLuaCommand("input.event(\"axisx0\", "..-steer..", 0)")
     agent:queueLuaCommand("input.event(\"axisy0\", "..throttle..", 0)")
     agent:queueLuaCommand("input.event(\"axisy1\", "..brake..", 0)")
@@ -586,6 +596,10 @@ local function getWaypointsFiles()
 	do return waypointsFiles end
 end
 
+local function resetWaypoints( carId )
+	wayPointsIndex[carId] = 1	
+end
+
 -- public interface
 M.update               = update
 M.reset                = reset
@@ -607,5 +621,6 @@ M.runCars              = runAllCars
 M.getCarsId            = getCarsId
 M.getWaypointsFiles    = getWaypointsFiles
 M.stopAllCars		   = stopAllCars
+M.resetWaypoints	   = resetWaypoints
 
 return M
