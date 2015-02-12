@@ -158,6 +158,10 @@ WaypointsGUI.prototype.initialize = function(){
         self.showSelectCarForm();
     });
 
+	$('<button>Reset all waypoints</button>').appendTo(this.rootElement).click(function(){
+		callSystemLuaFunction("wayPoints.resetAllWaypoints", "");
+    });
+
 	$('<button>Print current car id</button>').appendTo(this.rootElement).click(function(){
         callSystemLuaFunction("wayPoints.printCurrentCarId", "");
     });

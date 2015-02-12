@@ -610,6 +610,12 @@ local function resetWaypoints( carId )
 	wayPointsIndex[carId] = 1
 end
 
+local function resetAllWaypoints()
+	for key in pairs( wayPoints ) do
+        resetWaypoints( key )
+    end
+end
+
 -- public interface
 M.update               = update
 M.reset                = reset
@@ -632,5 +638,6 @@ M.getCarsId            = getCarsId
 M.getWaypointsFiles    = getWaypointsFiles
 M.stopAllCars		   = stopAllCars
 M.resetWaypoints	   = resetWaypoints
+M.resetAllWaypoints	   = resetAllWaypoints
 
 return M
