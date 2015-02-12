@@ -1,4 +1,4 @@
-.app .WaypointsGUI .wpPopupLoadBox, .app .WaypointsGUI .wpPopupSaveBox {
+.app .WaypointsGUI .wpPopupLoadBox, .app .WaypointsGUI .wpPopupSaveBox, .app .WaypointsGUI .wpSelectCarForm {
     display: none; /* Hide the DIV */
     position: fixed;
     height: 101%;
