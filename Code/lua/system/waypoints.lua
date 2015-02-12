@@ -492,6 +492,13 @@ end
 local function stopCar( carId )
 	if ( canCarRun[carId] ~= nil ) then
 		canCarRun[carId] = 0
+
+		local agent = BeamEngine:getSlot(carId)
+		agent:queueLuaCommand("input.event(\"axisx0\", 0, 0)")
+		agent:queueLuaCommand("input.event(\"axisy0\", 0, 0)")
+		agent:queueLuaCommand("input.event(\"axisy1\", 0, 0)")
+		agent:queueLuaCommand("input.event(\"axisy2\", 0, 0)")
+
 		print("Car stopped!")
 	end
 end
