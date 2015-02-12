@@ -1,4 +1,4 @@
-.app .WaypointsGUI #wpPopupLoadBox, #wpPopupSaveBox {
+.app .WaypointsGUI .wpPopupLoadBox, .app .WaypointsGUI .wpPopupSaveBox {
     display: none; /* Hide the DIV */
     position: fixed;
     height: 101%;
@@ -11,6 +11,6 @@
 	position: relative;
 }
 
-.app select, .app input, .app button{
+.app .WaypointsGUI select, .app .WaypointsGUI input, .app .WaypointsGUI button{
 	width: 99%;
 }

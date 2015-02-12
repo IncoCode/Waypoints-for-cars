@@ -2,7 +2,7 @@
     "info": {
         "name" : "Waypoints GUI",
         "author": "Incognito",
-        "version": "0.1",
+        "version": "0.2",
         "description": ""
     },
 
@@ -14,6 +14,6 @@
     },
 
     "data": {
-        "streams" : ["wheelInfo"]
+        "streams" : []
     }
 }

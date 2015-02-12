@@ -1,8 +1,91 @@
 function WaypointsGUI(){}
 
+WaypointsGUI.prototype.fillCarsId = function(comboBox) {
+	callSystemLuaFuncCallback("wayPoints.getCarsId()", function(arg){
+		$.each(arg, function(index, value) {
+			if (index == 'selected') {
+				return true;
+			}
+			var option = $("<option></option>").attr("value", index).text(index);
+			if (arg['selected'] == index) {
+				option.attr("selected", "1");
+			}
+			$(comboBox).append(option);
+		});
+	});
+}
+
+WaypointsGUI.prototype.showLoadForm = function() {
+	var self = this;
+	var frm = this.loadFrm;
+	$(frm).empty();
+
+	$('<label>CarId: </label>').appendTo(frm);
+	var carsIdCb = $('<select></select>').appendTo(frm);
+	$('<br>').appendTo(frm);
+	$('<label>FileName: </label>').appendTo(frm);
+	var wayPointsCb = $('<select></select>').appendTo(frm);
+	$('<br>').appendTo(frm);
+	// load btn
+	$('<button>Load</button>').appendTo(frm).click(function(){
+		var carId = $(carsIdCb).find('option:selected').val();
+		var fileName = $(wayPointsCb).find('option:selected').val();
+		callSystemLuaFunction("wayPoints.loadWayPoints", carId +",\"" +fileName +"\"");
+		$(frm).fadeOut("slow");
+	});
+	$('<br>').appendTo(frm);
+	// close btn
+	$('<button>Close</button>').appendTo(frm).click(function() {
+		frm.fadeOut('slow');
+	});
+
+	// fill data
+	this.fillCarsId(carsIdCb);
+
+	callSystemLuaFuncCallback("wayPoints.getWaypointsFiles()", function(arg){
+		$.each(arg, function(index, value) {
+			var option = $("<option></option>").attr("value", value).text(value);
+			$(wayPointsCb).append(option);
+		});
+	});
+
+	$(frm).fadeIn('slow');
+}
+
+WaypointsGUI.prototype.showSaveForm = function() {
+	var self = this;
+	var frm = this.saveFrm;
+	$(frm).empty();
+
+	$('<label>CarId: </label>').appendTo(frm);
+	var carsIdCb = $('<select></select>').appendTo(frm);
+	$('<br>').appendTo(frm);
+	$('<label>FileName: </label>').appendTo(frm);
+	var fileNameI = $('<input type="text">').appendTo(frm);
+	$('<br>').appendTo(frm);
+	// save btn
+	$('<button>Save</button>').appendTo(frm).click(function() {
+		var carId = $(carsIdCb).find('option:selected').val();
+		var fileName = $(fileNameI).val();
+		callSystemLuaFunction("wayPoints.saveWayPoints", carId +",\"" +fileName +"\"");
+		$(frm).fadeOut("slow");
+	});
+	$('<br>').appendTo(frm);
+	// close btn
+	$('<button>Close</button>').appendTo(frm).click(function() {
+		$(frm).fadeOut("slow");
+	});
+
+	// fill data
+	this.fillCarsId(carsIdCb);
+
+	$(frm).fadeIn('slow');
+}
+
 WaypointsGUI.prototype.initialize = function(){
-	$('<div id="wpPopupSaveBox" hidden></div>').appendTo(this.rootElement);
-	$('<div id="wpPopupLoadBox" hidden></div>').appendTo(this.rootElement);
+	this.loadFrm = $('<div class="wpPopupLoadBox" hidden></div>').appendTo(this.rootElement);
+	this.saveFrm = $('<div class="wpPopupSaveBox" hidden></div>').appendTo(this.rootElement);
+	var self = this;
 
 	$('<button>Start recording path</button>').appendTo(this.rootElement).click(function(){
         callSystemLuaFunction("wayPoints.startRecordingPath", "");
@@ -14,52 +97,12 @@ WaypointsGUI.prototype.initialize = function(){
 
 	// save waypoints
 	$('<button>Save waypoints</button>').appendTo(this.rootElement).click(function(){
-		callSystemLuaFuncCallback("wayPoints.getCarsId()", function(arg){
-			//console.log(arg);
-			$.each(arg, function(index, value) {
-				if (index == 'selected') {
-					return true;
-				}
-				var option = $("<option></option>")
-					.attr("value", index)
-					.text(index);
-				if (arg['selected'] == index) {
-					option.attr("selected", "1");
-				}
-				$('#carIds').append(option);
-			});
-		});
-		$('#wpPopupSaveBox').fadeIn("slow");
+		self.showSaveForm();
     });
 
 	// load waypoints
 	$('<button>Load waypoints</button>').appendTo(this.rootElement).click(function(){
-        callSystemLuaFuncCallback("wayPoints.getCarsId()", function(arg){
-			//console.log(arg);
-			$.each(arg, function(index, value) {
-				if (index == 'selected') {
-					return true;
-				}
-				var option = $("<option></option>")
-					.attr("value", index)
-					.text(index);
-				if (arg['selected'] == index) {
-					option.attr("selected", "1");
-				}
-				$('#carIdsLoad').append(option);
-			});
-		});
-
-		callSystemLuaFuncCallback("wayPoints.getWaypointsFiles()", function(arg){
-			console.log(arg);
-			$.each(arg, function(index, value) {
-				var option = $("<option></option>")
-					.attr("value", value)
-					.text(value);
-				$('#fileNames').append(option);
-			});
-		});
-		$('#wpPopupLoadBox').fadeIn("slow");
+		self.showLoadForm();
     });
 
 	$('<button>Run all cars</button>').appendTo(this.rootElement).click(function(){
@@ -74,49 +117,5 @@ WaypointsGUI.prototype.initialize = function(){
         callSystemLuaFunction("wayPoints.printCurrentCarId", "");
     });
 
-	// save form
-	$('#wpPopupSaveBox').load("apps/WaypointsGUI/saveForm.html", function() {
-
-		$("#wpSaveWayPoints").click(function() {
-			var carId = $("#carIds option:selected").val();
-			var fileName = $("#fileName").val();
-			callSystemLuaFunction("wayPoints.wpSaveWayPoints", carId +",\"" +fileName +"\"");
-			$('#wpPopupSaveBox').fadeOut("slow");
-			$('#fileName').val("");
-			$('#carIds')
-				.find('option')
-				.remove();
-		});
-
-		$("#wpCloseSaveForm").click(function(){
-			$('#wpPopupSaveBox').fadeOut("slow");
-		});
-	});
-
-	// load form
-	$('#wpPopupLoadBox').load("apps/WaypointsGUI/loadForm.html", function() {
-
-		$("#wpLoadWayPoints").click(function() {
-			var carId = $("#carIdsLoad option:selected").val();
-			var fileName = $("#fileNames option:selected").val();
-			callSystemLuaFunction("wayPoints.loadWayPoints", carId +",\"" +fileName +"\"");
-			$('#wpPopupLoadBox').fadeOut("slow");
-			$('#fileNames')
-				.find('option')
-				.remove();
-			$('#carIdsLoad')
-				.find('option')
-				.remove();
-		});
-
-		$("#wpCloseLoadForm").click(function(){
-			$('#wpPopupLoadBox').fadeOut("slow");
-		});
-	});
-
 	console.log("WaypointsGUI inizialize");
-};
-
-WaypointsGUI.prototype.update = function(streams) {
-
 }
