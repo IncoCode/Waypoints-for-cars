@@ -4,6 +4,7 @@ Instruction in **Help.zip** . Extract this archive and run **index.html** in you
 
 ##UI App
 This mod comes with UI App - **WaypointsGUI**. That app can handle almost all mod commands.
+
 ![Alt text](/Help/4.png?raw=true "UI App")
 
 [Demonstration on Youtube](https://www.youtube.com/watch?v=UcEl6h2eFDY)
