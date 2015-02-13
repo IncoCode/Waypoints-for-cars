@@ -157,12 +157,12 @@ local function agentSeek( id, agent, targetPos, flee, maxSpeed )
 	if ad.stopped < 0 then ad.stopped = 0 end
 
 	-- if the two cars are touching
-	if distance >= 5 and ad.velo >= 5 then
-		ad.touching = ad.touching - 0.5
-	elseif distance < 5 and ad.velo < 5 then
-		ad.touching = ad.touching + 0.2
-	end
-	if ad.touching < 0 then ad.touching = 0 end
+	--if distance >= 5 and ad.velo >= 5 then
+		--ad.touching = ad.touching - 0.5
+	--elseif distance < 5 and ad.velo < 5 then
+		--ad.touching = ad.touching + 0.2
+	--end
+	--if ad.touching < 0 then ad.touching = 0 end
 
 	--if too far away start running up the tooFar variable
 	if distance <= 25 then
@@ -231,40 +231,40 @@ local function agentSeek( id, agent, targetPos, flee, maxSpeed )
 	if ad.circling < 0 then ad.circling = 0 end
 
 	--make it spin out a bit less
-	if reverse == false then
-		if absDirDiff > 0.4 and absDirDiff < 1.5 and math.abs(ad.velo) > 8 then
-			throttle = 1 - (absDirDiff * 0.2)
-			brake = 0
-			--print("slowing")
-		end
-		if absDirDiff >= 1.5 and math.abs(ad.velo) > 8 then
-			throttle = 1 - (ad.velo * 0.003)
-			brake = 0.5 + (absDirDiff*0.1)
+	--if reverse == false then
+		--if absDirDiff > 0.4 and absDirDiff < 1.5 and math.abs(ad.velo) > 8 then
+			--throttle = 1 - (absDirDiff * 0.2)
+			--brake = 0
+			----print("slowing")
+		--end
+		--if absDirDiff >= 1.5 and math.abs(ad.velo) > 8 then
+			--throttle = 1 - (ad.velo * 0.003)
+			--brake = 0.5 + (absDirDiff*0.1)
 			--print("braking")
-			if brake > 1 then brake = 1 end
-			if brake > 0.5 then steer = steer * 0.5 end
-		end
+			--if brake > 1 then brake = 1 end
+			--if brake > 0.5 then steer = steer * 0.5 end
+		--end
 		--if the player is beside, stop accelerating
-		if absDirDiff > 1 and absDirDiff < 2.14 and distance < 3 and math.abs(ad.velo) < 5 then
-			throttle = 0
-			--reverse = true
-		end
-		if math.abs(steer) > 0.5 then
-			throttle = throttle - (0.2 * math.abs(steer))
-		end
-	end
+		--if absDirDiff > 1 and absDirDiff < 2.14 and distance < 3 and math.abs(ad.velo) < 5 then
+			--throttle = 0
+			----reverse = true
+		--end
+		--if math.abs(steer) > 0.5 then
+			--throttle = throttle - (0.2 * math.abs(steer))
+		--end
+	--end
 
 	--if they're close enough and the player is behind, back into him
-	if absDirDiff > 2.6 and distance < 50 then
-		reverse = true
-		steer = (math.pi - absDirDiff) * steer
-	end
+	--if absDirDiff > 2.6 and distance < 50 then
+		--reverse = true
+		--steer = (math.pi - absDirDiff) * steer
+	--end
 
 	--if agent backs into player and touches them for too long, drive away
-	if ad.touching > 35 and absDirDiff > 2.9 and reverse == true then
-		reverse = false
-		throttle = 1
-	end
+	--if ad.touching > 35 and absDirDiff > 2.9 and reverse == true then
+		--reverse = false
+		--throttle = 1
+	--end
 
 	--if the agent is stopped for too long, switch directions
 	if ad.stopped > 30 then
@@ -299,15 +299,15 @@ local function agentSeek( id, agent, targetPos, flee, maxSpeed )
 	end
 
 	--escape!
-	if (distance < ad.escapeDist) and ad.touching > 35 then
-		throttle = -1 + (absDirDiff * 0.6366)
-		steer = dirDiff * 0.1
-		ad.touching = 36
-		if distance > ad.escapeDist then
-			ad.touching = 0
-			ad.escapeDist = -1
-		end
-	end
+	--if (distance < ad.escapeDist) and ad.touching > 35 then
+		--throttle = -1 + (absDirDiff * 0.6366)
+		--steer = dirDiff * 0.1
+		--ad.touching = 36
+		--if distance > ad.escapeDist then
+			--ad.touching = 0
+			--ad.escapeDist = -1
+		--end
+	--end
 
 	--if far enough away, forget about reversing and just turn around
 	--if ad.tooFar > 250 then
@@ -480,8 +480,9 @@ local function runCar( carId )
 	if ( wayPoints[carId] == nil ) then
 		print("Load waypoints for this car!")
 	else
-		if agents[id] ~= nil then
+		if agents[carId] ~= nil then
 			agents[carId].stopped = 0
+			print("agents.stopped"..agents[carId].stopped)
 		end
 		canCarRun[carId] = 1
 		wayPoints[carId].maxCount = getLastIndex( wayPoints[carId].position )
