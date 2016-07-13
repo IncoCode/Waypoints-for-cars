@@ -1,4 +1,4 @@
-This mod allows you to run cars by waypoints (paths). Based on **simpleAI**.
+This mod allows you run cars by waypoints (paths). Based on **simpleAI**.
 
 Instruction in **Help.zip** . Extract this archive and run **index.html** in your browser. Or use this [link](https://rawgithub.com/IncoCode/Waypoints-for-cars/master/Help/HTML/index.html).
 
